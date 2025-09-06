@@ -19,14 +19,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Check, ChevronsUpDown, GalleryVerticalEnd, Loader, Loader2 } from "lucide-react";
+import { Check, ChevronsUpDown, GalleryVerticalEnd, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { SignUpData, SignUpSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { toast } from "sonner";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const role = ["User", "Company"];
 
