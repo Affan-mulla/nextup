@@ -1,0 +1,160 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum PaymentStatus {
+  SUCCEEDED
+  PENDING
+  FAILED
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  TRIALING
+  CANCELED
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum IdeaStatus {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  ARCHIVED
+}
+
+enum VoteType {
+  UP
+  DOWN
+}
+
+model User {
+  id           String      @id @default(cuid())
+  email        String      @unique
+  emailVerified DateTime?
+  name         String?
+  image        String?
+  role         Role        @default(USER)
+  passwordHash String
+  createdAt    DateTime    @default(now())
+
+  companies    Companies[]
+  follows      Follows[]
+  ideas        Ideas[]
+  votes        Votes[]
+  comments     Comments[]
+}
+
+model Companies {
+  id            String          @id @default(cuid())
+  name          String
+  logoUrl       String?
+  description   String?
+  ownerId       String
+  createdAt     DateTime        @default(now())
+  owner         User            @relation(fields: [ownerId], references: [id])
+  subscriptions Subscriptions[]
+  followers     Follows[]
+  ideas         Ideas[]
+}
+
+model Plans {
+  id            String          @id @default(cuid())
+  name          String
+  priceCents    Int
+  features      Json?
+  createdAt     DateTime        @default(now())
+
+  subscriptions Subscriptions[]
+}
+
+model Subscriptions {
+  id                   String              @id @default(cuid())
+  companyId            String
+  planId               String
+  currentPeriodStart   DateTime?
+  currentPeriodEnd     DateTime?
+  status               SubscriptionStatus  @default(TRIALING)
+  stripeSubscriptionId String
+  createdAt            DateTime            @default(now())
+
+  company              Companies           @relation(fields: [companyId], references: [id])
+  plan                 Plans               @relation(fields: [planId], references: [id])
+  payments             Payments[]
+}
+
+model Payments {
+  id                 String        @id @default(cuid())
+  subscriptionId     String
+  amountCents        Int
+  currency           String        @default("USD")
+  status             PaymentStatus
+  paymentDate        DateTime?
+  stripePaymentId    String
+  createdAt          DateTime      @default(now())
+
+  subscription       Subscriptions @relation(fields: [subscriptionId], references: [id])
+}
+
+model Follows {
+  id         String    @id @default(cuid())
+  userId     String
+  companyId  String
+  createdAt  DateTime  @default(now())
+
+  user       User      @relation(fields: [userId], references: [id])
+  company    Companies @relation(fields: [companyId], references: [id])
+
+  @@unique([userId, companyId])
+}
+
+model Ideas {
+  id          String      @id @default(cuid())
+  title       String
+  description String
+  userId      String
+  companyId   String
+  status      IdeaStatus  @default(OPEN)
+  votesCount  Int         @default(0)
+  createdAt   DateTime    @default(now())
+
+  company     Companies   @relation(fields: [companyId], references: [id])
+  author      User        @relation(fields: [userId], references: [id])
+
+  votes       Votes[]
+  comments    Comments[]
+}
+
+model Votes {
+  id        String    @id @default(cuid())
+  userId    String
+  ideaId    String
+  type      VoteType
+  createdAt DateTime  @default(now())
+
+  user      User      @relation(fields: [userId], references: [id])
+  idea      Ideas     @relation(fields: [ideaId], references: [id])
+
+  @@unique([userId, ideaId])
+}
+
+model Comments {
+  id        String    @id @default(cuid())
+  content   String
+  userId    String
+  ideaId    String
+  createdAt DateTime  @default(now())
+
+  user      User      @relation(fields: [userId], references: [id])
+  idea      Ideas     @relation(fields: [ideaId], references: [id])
+}
