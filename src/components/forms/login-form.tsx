@@ -27,7 +27,7 @@ export function LoginForm({
 
 
   const githubHandler = () => {
-    signIn("github", { callbackUrl: "/ideas" });
+    signIn("github", { callbackUrl: "/" });
   };
 
   const {

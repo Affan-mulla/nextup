@@ -39,7 +39,7 @@ const CreateAccount = ({
   const router = useRouter();
 
   const githubHandler = () => {
-    signIn("github", { callbackUrl: "/ideas" });
+    signIn("github", { callbackUrl: "/" });
   };
 
   const {

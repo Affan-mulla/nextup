@@ -1,16 +1,16 @@
-import NextAuth from "next-auth";
+import NextAuth, { getServerSession, NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GitHubProvider from "next-auth/providers/github";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { compare } from "bcrypt-ts";
 import prisma from "@/lib/prisma";
+import {
+  GetServerSidePropsContext,
+  NextApiRequest,
+  NextApiResponse,
+} from "next";
 
-export const {
-  handlers: { GET, POST },
-  auth,
-  signIn,
-  signOut,
-} = NextAuth({
+export const config = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   providers: [
@@ -18,6 +18,12 @@ export const {
     GitHubProvider({
       clientId: process.env.GITHUB_ID!,
       clientSecret: process.env.GITHUB_SECRET!,
+      profile(profile) {
+        return {
+          role : profile.role ?? "USER",
+          ...profile
+        }
+      }
     }),
 
     // Credentials login
@@ -41,9 +47,15 @@ export const {
         const isValid = await compare(password, user.passwordHash);
         if (!isValid) return null;
 
-        return { id: user.id, email: user.email, name: user.name };
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.role,
+        };
       },
     }),
+
   ],
   callbacks: {
     async jwt({ token, user }) {
@@ -51,6 +63,7 @@ export const {
         token.id = (user as any).id;
         token.email = user.email;
         token.name = user.name;
+        token.role = user.role;
       }
       return token;
     },
@@ -59,6 +72,7 @@ export const {
         session.user.id = token.id as string;
         session.user.email = token.email as string;
         session.user.name = token.name as string;
+        session.user.role = token.role as string;
       }
       return session;
     },
@@ -69,4 +83,13 @@ export const {
     verifyRequest: "/auth/verify", // “check your email” screen
     error: "/auth/error", // handle expired/invalid links
   },
-});
+}) satisfies NextAuthOptions;
+
+export function auth(
+  ...args:
+    | [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
+    | [NextApiRequest, NextApiResponse]
+    | []
+) {
+  return getServerSession(...args, config);
+}
