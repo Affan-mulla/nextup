@@ -31,7 +31,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { signOut } from "next-auth/react"
-import Logout from "@/app/_components/Logout"
 
 export function NavUser({
   user,
