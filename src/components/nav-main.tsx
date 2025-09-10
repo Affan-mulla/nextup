@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { ChevronRight, type LucideIcon } from "lucide-react"
+import { ChevronRight, Sparkle, Sparkles, type LucideIcon } from "lucide-react";
 
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -17,51 +17,54 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
+import Link from "next/link";
+import Image from "next/image";
+import { useState } from "react";
+
+interface NavMainProps {
+      products?: { title: string; url: string; img: string }[]
+}
 
 export function NavMain({
-  items,
-}: {
-  items: {
-    title: string
-    url: string
-    icon: LucideIcon
-    isActive?: boolean
-    items?: {
-      title: string
-      url: string
-    }[]
-  }[]
-}) {
+  products
+} : NavMainProps) {
+  const [isOpen, setIsOpen] = useState(true);
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
-        {items.map((item) => (
-          <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={item.title}>
-                <a href={item.url}>
-                  <item.icon />
-                  <span>{item.title}</span>
-                </a>
-              </SidebarMenuButton>
-              {item.items?.length ? (
+          <Collapsible asChild defaultOpen={true} open={isOpen} onOpenChange={setIsOpen}>
+            <SidebarMenuItem className="">
+              <CollapsibleTrigger asChild className="select-none hover:bg-muted p-2 rounded-md flex items-center mb-1">
+                <div className="w-full flex items-center justify-between text-[16px] font-outfit text-muted-foreground">
+                  <span className="flex items-center gap-2">
+                    <Sparkles size={18} />
+                    <span>Products</span>
+                  </span>
+                  {isOpen ?<ChevronRight className="rotate-90" /> : <ChevronRight />  }
+                </div>
+              </CollapsibleTrigger>
+
+              {products?.length ? (
                 <>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuAction className="data-[state=open]:rotate-90">
-                      <ChevronRight />
-                      <span className="sr-only">Toggle</span>
-                    </SidebarMenuAction>
-                  </CollapsibleTrigger>
                   <CollapsibleContent>
                     <SidebarMenuSub>
-                      {item.items?.map((subItem) => (
-                        <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuSubButton asChild>
-                            <a href={subItem.url}>
+                      {products?.map((subItem) => (
+                        <SidebarMenuSubItem key={subItem.title} className="">
+                          <SidebarMenuSubButton
+                            asChild
+                            className="text-[14px] font-inter"
+                          >
+                            <Link href={subItem.url} className="">
+                              <Image
+                                src={subItem.img}
+                                width={25}
+                                height={25}
+                                alt={subItem.title}
+                                className="rounded-full mr-1"
+                              />
                               <span>{subItem.title}</span>
-                            </a>
+                            </Link>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}
@@ -71,8 +74,7 @@ export function NavMain({
               ) : null}
             </SidebarMenuItem>
           </Collapsible>
-        ))}
       </SidebarMenu>
     </SidebarGroup>
-  )
+  );
 }
