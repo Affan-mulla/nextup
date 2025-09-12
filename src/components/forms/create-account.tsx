@@ -59,6 +59,8 @@ const CreateAccount = ({
   });
 
   const onSubmit = async(data: any) => {
+    console.log(data);
+    
     try {
       setLoading(true);
       const user = await axios.post("/api/auth/signup", data);

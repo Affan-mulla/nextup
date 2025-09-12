@@ -8,13 +8,14 @@ import { hash } from "bcrypt-ts";
 export async function POST(request: Request) {
   try {
     const data = await request.json();
+    console.log(data);
     if (!data.email || !data.password || !data.username || !data.role) {
       return new Response("Missing fields", { status: 400 });
     }
     if (data.role !== "user" && data.role !== "company") {
       return new Response("Invalid role", { status: 400 });
     }
-    if (data.role === "company" && !data.companyName) {
+    if (data.role === "company" && !data.company) {
       return new Response("Missing company name for company role", {
         status: 400,
       });
@@ -48,7 +49,6 @@ export async function POST(request: Request) {
           ownerId: user.id,
         },
       });
-      console.log(company);
 
       if (!company) {
         return new Response("Failed to create company", { status: 500 });

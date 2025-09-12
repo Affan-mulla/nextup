@@ -17,6 +17,10 @@ export default withAuth(
       // or show a "Not Allowed" page
     }
 
+  if(!req.nextUrl.pathname.startsWith("/dashboard") && token.role === "ADMIN") {
+    return NextResponse.rewrite(new URL("/not-allowed", req.url)) 
+  }    
+
     // allow all other cases
     return NextResponse.next()
   },

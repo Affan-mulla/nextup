@@ -1,16 +1,18 @@
 import Idea from "@/app/_components/feed/Idea";
 import { SortFeed } from "@/app/_components/Sort";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { auth } from "@/lib/auth";
 
 function Page() {
+  auth().then((res) => console.log(res));
   
   return (
-    <div>
+    <div >
       <div className="py-2 border-b-1 ">
         <SortFeed />
       </div>
       <div className="mt-2">
-        <ScrollArea className="h-[calc(100vh-200px)]" >
+        <ScrollArea className="h-[calc(100vh-150px)]" >
            <ScrollBar orientation="vertical"  />
         {/* Feature */}
         <Idea />

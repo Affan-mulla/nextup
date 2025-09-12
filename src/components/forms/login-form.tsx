@@ -47,7 +47,7 @@ export function LoginForm({
       redirect: false,
       email: data.email,
       password: data.password,
-      callbackUrl: "/home",
+      callbackUrl: "/dashboard/company",
     });
 
     if (res?.error) {

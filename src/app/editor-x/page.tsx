@@ -1,8 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { SerializedEditorState } from "lexical"
-
 import { Editor } from "@/components/blocks/editor-x/editor"
 
 export const initialValue = {
@@ -35,10 +34,15 @@ export const initialValue = {
   },
 } as unknown as SerializedEditorState
 
-export default function EditorPage() {
-  const [editorState, setEditorState] =
-    useState<SerializedEditorState>(initialValue)
-    console.log(editorState)
+export default function EditorPage({ onChange }: { onChange?: (value: SerializedEditorState) => void }) {
+  const [editorState, setEditorState] = useState<SerializedEditorState>(initialValue)
+
+  useEffect(() => {
+    if (onChange) {
+      onChange(editorState) // 👈 push latest JSON to parent
+    }
+  }, [editorState, onChange])
+
   return (
     <Editor
       editorSerializedState={editorState}
