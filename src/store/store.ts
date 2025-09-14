@@ -10,7 +10,13 @@ type User = {
 }
 
 export const useStore = create((set) => ({
-    user : null,
+    user : {
+        id: "",
+        email: "",
+        name: "",
+        role: "",
+        image: ""
+    },
     setUser : (user : User) => set({user})
 
 }))

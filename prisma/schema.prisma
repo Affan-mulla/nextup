@@ -42,6 +42,7 @@ model User {
   id           String      @id @default(cuid())
   email        String      @unique
   emailVerified DateTime?
+  username     String      @unique
   name         String?
   image        String?
   role         Role        @default(USER)
@@ -60,7 +61,7 @@ model User {
 
 model Companies {
   id            String          @id @default(cuid())
-  name          String
+  name          String          @unique
   logoUrl       String?
   description   String?
   ownerId       String
@@ -124,7 +125,7 @@ model Follows {
 model Ideas {
   id          String      @id @default(cuid())
   title       String
-  description String
+  description Json
   userId      String
   companyId   String
   status      IdeaStatus  @default(OPEN)

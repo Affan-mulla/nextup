@@ -1,11 +1,7 @@
 import Idea from "@/app/_components/feed/Idea";
 import { SortFeed } from "@/app/_components/Sort";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { auth } from "@/lib/auth";
-
 function Page() {
-  auth().then((res) => console.log(res));
-  
   return (
     <div >
       <div className="py-2 border-b-1 ">

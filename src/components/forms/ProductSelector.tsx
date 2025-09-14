@@ -1,10 +1,7 @@
 "use client";
 
-import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
-
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import axios from "axios";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Command,
   CommandEmpty,
@@ -13,13 +10,14 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import axios from "axios";
 import Image from "next/image";
+import { useDebounce } from "../editor/editor-hooks/use-debounce";
+import { Loader, Search } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 interface Product {
   id: string;
@@ -27,93 +25,133 @@ interface Product {
   logoUrl?: string;
 }
 
-export function ProductSelector({ setId }: { setId: (val: string) => void }) {
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
-  const [products, setProducts] = React.useState<Product[]>([]);
+interface ProductSelectorProps {
+  setId: (id: string) => void;
+}
 
-  React.useEffect(() => {
-    if (value) {
-      setId(value);
+const ProductSelector: React.FC<ProductSelectorProps> = ({ setId }) => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  // fetch products list (with optional search)
+  const fetchProducts = useCallback(async (query?: string) => {
+    try {
+      setLoading(true);
+      setError("");
+      const res = await axios.get<Product[]>(
+        "/api/product/get-product",
+        query ? { params: { search: query } } : {}
+      );
+      setProducts(res.data || []);
+      console.log(res.data);
+    } catch (err) {
+      console.error("Error fetching products:", err);
+      setError("Failed to fetch products");
+    } finally {
+      setLoading(false);
     }
-  }, [value, setId]);
-
-  const getProducts = React.useCallback(async () => {
-    const res = await axios.get("/api/product/get-product");
-    console.log(res.data);
-
-    setProducts(res.data);
   }, []);
 
-  React.useEffect(() => {
-    getProducts();
-  }, []);
+  // debounce search input
+  const debouncedFetch = useDebounce((query: string) => {
+    if(products.find((p)=> p.name.includes(query))) {
+      return
+    }
+    fetchProducts(query.trim() || undefined);
+  }, 500);
+
+  const handleSearch = (value: string) => {
+    setSearch(value);
+    debouncedFetch(value);
+  };
+
+  // initial load
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
+
+  // notify parent of selection
+  useEffect(() => {
+    if (selected) setId(selected);
+  }, [selected, setId]);
+
+  // selected product memoized
+  const selectedProduct = useMemo(
+    () => products.find((p) => p.id === selected),
+    [products, selected]
+  );
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-[200px] justify-between"
-        >
-          {value ? (
-            <div className="flex items-center gap-2">
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild className="w-1/3">
+        <button className="flex items-center gap-2 rounded-md  bg-muted px-3 py-2 text-sm font-medium font-inter border border-border">
+          {
+            selectedProduct ? (
               <Image
-                src={
-                  products.find((p) => p.id === value)?.logoUrl ||
-                  "Placeholder.svg"
-                }
+                src={selectedProduct.logoUrl || "Placeholder.svg"}
+                alt={selectedProduct.name}
                 width={20}
                 height={20}
-                alt={products.find((p) => p.id === value)?.name || "Product"}
-                className="h-4 w-4 rounded-sm"
               />
-              <span>{products.find((p) => p.id === value)?.name}</span>
-            </div>
-          ) : (
-            "Select Product..."
-          )}
-          <ChevronsUpDown className="opacity-50 ml-auto" />
-        </Button>
-      </PopoverTrigger>
+            ) :
+            <Search size={20} className="text-muted-foreground" />
+          }
+          {selectedProduct ? selectedProduct.name : "Select a product"}
+        </button>
+      </DropdownMenuTrigger>
 
-      <PopoverContent className="w-[200px] p-0">
+      <DropdownMenuContent className="w-64 p-0 font-inter" side="bottom">
         <Command>
-          <CommandInput placeholder="Search Product..." className="h-9" />
+          <CommandInput
+            placeholder="Search product..."
+            value={search}
+            onValueChange={handleSearch}
+          />
+
           <CommandList>
-            <CommandEmpty>No Product found.</CommandEmpty>
+            {loading && (
+              <div className="flex items-center gap-2 px-2 py-2 text-sm text-muted-foreground">
+                <Loader className="h-4 w-4 animate-spin" /> Loading...
+              </div>
+            )}
+
+            {error && <p className="px-2 py-2 text-red-500">{error}</p>}
+
+            {!loading && !error && products.length === 0 && (
+              <CommandEmpty>No product found.</CommandEmpty>
+            )}
+
             <CommandGroup>
               {products.map((product) => (
                 <CommandItem
                   key={product.id}
-                  value={product.name} // ✅ use id, not name
-                  onSelect={() => {
-                    setValue(product.id);
-                    setOpen(false);
-                  }}
+                  value={product.name}
+                  onSelect={() => setSelected(product.id)}
+                  className={
+                    selected === product.id
+                      ? "bg-accent text-accent-foreground"
+                      : ""
+                  }
                 >
                   <Image
-                    src={product.logoUrl || "Placeholder.svg"}
+                    src={product.logoUrl || "/Placeholder.svg"}
+                    alt={product.name || "Product"}
                     width={20}
                     height={20}
-                    alt={product.name}
-                    className="mr-2 h-4 w-4 rounded-sm"
+                    className="rounded-sm mr-2"
                   />
-                  {product.name} {/* ✅ show name */}
-                  <Check
-                    className={cn(
-                      "ml-auto",
-                      value === product.id ? "opacity-100" : "opacity-0"
-                    )}
-                  />
+                  {product.name}
                 </CommandItem>
               ))}
             </CommandGroup>
           </CommandList>
         </Command>
-      </PopoverContent>
-    </Popover>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
-}
+};
+
+export default ProductSelector;

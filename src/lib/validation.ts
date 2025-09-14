@@ -21,3 +21,14 @@ export const SignInSchema = z.object({
 });
 
 export type SignInData = z.infer<typeof SignInSchema>;
+
+
+
+export const IdeaDataSchema = z.object({
+  title : z.string().min(4, "Title must be between 4 and 30 characters").max(200, "Title must be between 4 and 30 characters"),
+  productId : z.string(),
+  userId : z.string(),
+  description : z.object({}).optional(),
+})
+
+export type IdeaData = z.infer<typeof IdeaDataSchema>;

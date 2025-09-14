@@ -17,7 +17,7 @@ const IdeaHeader = ({username , time,avatar} : IdeaProps) => {
         className="flex items-center hover:underline hover:text-primary duration-200 transition-colors"
       >
         <Image
-          src={`${avatar}`}
+          src={avatar}
           className="mr-2"
           alt=""
           width={18}

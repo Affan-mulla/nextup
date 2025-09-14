@@ -96,7 +96,6 @@ import { HistoryToolbarPlugin } from "@/components/editor/plugins/toolbar/histor
 import { LinkToolbarPlugin } from "@/components/editor/plugins/toolbar/link-toolbar-plugin"
 import { SubSuperToolbarPlugin } from "@/components/editor/plugins/toolbar/subsuper-toolbar-plugin"
 import { ToolbarPlugin } from "@/components/editor/plugins/toolbar/toolbar-plugin"
-import { TypingPerfPlugin } from "@/components/editor/plugins/typing-pref-plugin"
 import { EMOJI } from "@/components/editor/transformers/markdown-emoji-transformer"
 import { HR } from "@/components/editor/transformers/markdown-hr-transformer"
 import { IMAGE } from "@/components/editor/transformers/markdown-image-transformer"
@@ -105,7 +104,7 @@ import { TWEET } from "@/components/editor/transformers/markdown-tweet-transform
 import { Separator } from "@/components/ui/separator"
 
 const placeholder = "Press / for commands..."
-const maxLength = 500
+const maxLength = 2000
 
 export function Plugins({}) {
   const [floatingAnchorElem, setFloatingAnchorElem] =
@@ -176,6 +175,7 @@ export function Plugins({}) {
               <div className="" ref={onRef}>
                 <ContentEditable
                   placeholder={placeholder}
+                  
                   className="ContentEditable__root relative block h-[calc(100vh-570px)] min-h-72 min-h-full overflow-auto px-8 py-4 focus:outline-none"
                 />
               </div>
@@ -222,7 +222,6 @@ export function Plugins({}) {
             ...TEXT_MATCH_TRANSFORMERS,
           ]}
         />
-        <TypingPerfPlugin />
         <TabFocusPlugin />
         <AutocompletePlugin />
         <AutoLinkPlugin />

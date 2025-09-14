@@ -1,30 +1,58 @@
 "use client"
 import EditorPage from "@/app/editor-x/page"
-import { ProductSelector } from "@/components/forms/ProductSelector"
+import ProductSelector  from "@/components/forms/ProductSelector"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useForm } from "react-hook-form"
 import { useState } from "react"
+import { IdeaData, IdeaDataSchema } from "@/lib/validation"
+import { useStore } from "@/store/store"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { toast } from "sonner"
+import axios from "axios"
+import { useRouter } from "next/navigation"
+import { Loader } from "lucide-react"
 
 const Page = () => {
-  const {handleSubmit, register, setValue, formState: {errors}} = useForm({
+  const user = useStore((state : any) => state.user)
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+  
+  const {handleSubmit, register, setValue, formState: {errors}} = useForm<IdeaData>({
+    resolver: zodResolver(IdeaDataSchema),
     defaultValues : {
       title : "",
       productId : "",
-      description: null
+      description: undefined,
+      userId : user.id,
     }
   })
 
   const [editorJson, setEditorJson] = useState<any>(null)
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async(data: any) => {
     // attach editor JSON before submit
     data.description = editorJson
     console.log("Form Data:", data)
+    // try {
+    //   setLoading(true)
+    //   const res = await axios.post("/api/idea/create", data)
 
-    // TODO: call your API
-    // await fetch("/api/ideas", { method: "POST", body: JSON.stringify(data) })
+    //   if(res.status === 200){
+    //     toast.success("Idea created successfully.");
+    //     setEditorJson(null)
+    //     router.push(`/idea/${res.data.id}`)
+    //   }
+
+    // } catch (error) {
+    //   console.log(error);
+    //   toast.error("Something went wrong. Please try again.");
+      
+    // }
+    // finally {
+    //   setLoading(false)
+    // }
   }
 
   return (
@@ -56,7 +84,7 @@ const Page = () => {
               className="h-11"
               {...register("title", { required: true })}
             />
-            {errors.title && <span className="text-red-500 text-sm">Required</span>}
+            {errors.title && <span className="text-red-500 text-sm">{errors.title.message}</span>}
           </div>
 
           {/* Description */}
@@ -74,7 +102,9 @@ const Page = () => {
               Cancel
             </Button>
             <Button type="submit" className="w-full sm:w-auto">
-              Create
+              {
+                loading ? <Loader className="animate-spin" /> : "Create"
+              }
             </Button>
           </div>
         </form>
