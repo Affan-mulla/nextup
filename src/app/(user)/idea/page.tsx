@@ -1,64 +1,118 @@
-"use client"
-import EditorPage from "@/app/editor-x/page"
-import ProductSelector  from "@/components/forms/ProductSelector"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useForm } from "react-hook-form"
-import { useState } from "react"
-import { IdeaData, IdeaDataSchema } from "@/lib/validation"
-import { useStore } from "@/store/store"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { toast } from "sonner"
-import axios from "axios"
-import { useRouter } from "next/navigation"
-import { Loader } from "lucide-react"
+"use client";
+import EditorPage from "@/app/editor-x/page";
+import ProductSelector from "@/components/forms/ProductSelector";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { IdeaData, IdeaDataSchema } from "@/lib/validation";
+import { useStore } from "@/store/store";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { Loader } from "lucide-react";
+import { replaceImagesFromLexical } from "@/hooks/useReplaceImage";
+import { base64ToFile } from "@/hooks/baseToFile";
+import { useExtractImagesFromLexical } from "@/hooks/useGetImage";
 
+type LexicalNode = any;
+
+interface ReplaceOpts {
+  maxImages?: number; // optional cap (e.g. 2)
+  failIfInsufficientUrls?: boolean; // throw if urls < images found
+}
 const Page = () => {
-  const user = useStore((state : any) => state.user)
-  const router = useRouter()
-  const [loading, setLoading] = useState(false)
-  
-  const {handleSubmit, register, setValue, formState: {errors}} = useForm<IdeaData>({
+  const user = useStore((state: any) => state.user);
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [editorJson, setEditorJson] = useState<any>(null);
+
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    formState: { errors },
+  } = useForm<IdeaData>({
     resolver: zodResolver(IdeaDataSchema),
-    defaultValues : {
-      title : "",
-      productId : "",
+    defaultValues: {
+      title: "",
+      productId: "",
       description: undefined,
-      userId : user.id,
-    }
-  })
+      userId: user.id,
+    },
+  });
 
-  const [editorJson, setEditorJson] = useState<any>(null)
+  // Walk through Lexical JSON tree
 
-  const onSubmit = async(data: any) => {
-    // attach editor JSON before submit
-    data.description = editorJson
-    console.log("Form Data:", data)
-    // try {
-    //   setLoading(true)
-    //   const res = await axios.post("/api/idea/create", data)
+  async function uploadImage(file: File) {
+    // 1. Ask server for signed URL
+    const res = await axios.post("/api/upload-url", { fileName: file.name });
 
-    //   if(res.status === 200){
-    //     toast.success("Idea created successfully.");
-    //     setEditorJson(null)
-    //     router.push(`/idea/${res.data.id}`)
-    //   }
+    const { signedUrl, path, error } = await res.data;
+    if (error) throw new Error(error);
 
-    // } catch (error) {
-    //   console.log(error);
-    //   toast.error("Something went wrong. Please try again.");
-      
-    // }
-    // finally {
-    //   setLoading(false)
-    // }
+    // 2. Upload directly to Supabase Storage
+    const uploadRes = await axios.put(signedUrl, file, {
+      headers: { "Content-Type": file.type },
+    });
+
+    if (!uploadRes.status || uploadRes.status !== 200)
+      throw new Error("Upload failed");
+
+    // 3. Return public URL or storage path
+    const publicUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/ideas/${path}`;
+    return { publicUrl, path };
   }
 
+  const imagesExist = async (images: any[]) => {
+    const imagesFile = images.map((image: any) => {
+      const file = base64ToFile(image.src, `image-${Date.now()}.png`);
+      return file;
+    });
+
+    const uploadedImages = await Promise.all(
+      imagesFile.map((file) => uploadImage(file))
+    );
+
+    return uploadedImages;
+  };
+
+  const onSubmit = async (data: any) => {
+    setLoading(true);
+    const images = useExtractImagesFromLexical(editorJson.root);
+
+    if (images.length > 0) {
+      const uploadedImages = await imagesExist(images);
+      const imageUrls = uploadedImages.map((image) => image.publicUrl);
+    
+      // Replace image URLs in editor JSON
+      const replacedEditorJson = replaceImagesFromLexical(
+        editorJson.root,
+        imageUrls
+      );
+      setEditorJson(replacedEditorJson);
+    }
+
+    // attach editor JSON before submit
+    data.description = editorJson;
+
+    try {
+      const res = await axios.post("/api/idea/create", data);
+      if (res.status === 200) {
+        router.push(`/idea/${res.data.id}`);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="max-h-screen flex items-center justify-center">
-      <div className="w-full max-w-3xl md:bg-card h-full md:p-6 p-3 rounded-2xl md:border md:border-border md:shadow-sm flex flex-col gap-4">
-        
+    <div className=" flex md:pt-3 pt-2 items-center justify-center">
+      <div className="w-full max-w-3xl md:bg-card h-full md:p-6 p-3  rounded-2xl md:border md:border-border md:shadow-sm flex flex-col gap-4">
         {/* Header */}
         <div className="flex flex-col gap-1">
           <h1 className="text-3xl font-semibold font-outfit">Create Idea</h1>
@@ -72,45 +126,57 @@ const Page = () => {
           <div className="space-y-2">
             <Label htmlFor="product">Product</Label>
             <ProductSelector setId={(val) => setValue("productId", val)} />
-            {errors.productId && <span className="text-red-500 text-sm">Required</span>}
+            {errors.productId && (
+              <span className="text-red-500 text-sm">Required</span>
+            )}
           </div>
 
           {/* Title */}
           <div className="space-y-2">
             <Label htmlFor="title">Title</Label>
-            <Input 
-              id="title" 
-              placeholder="Enter a catchy title" 
+            <Input
+              id="title"
+              placeholder="Enter a catchy title"
               className="h-11"
               {...register("title", { required: true })}
             />
-            {errors.title && <span className="text-red-500 text-sm">{errors.title.message}</span>}
+            {errors.title && (
+              <span className="text-red-500 text-sm">
+                {errors.title.message}
+              </span>
+            )}
           </div>
 
           {/* Description */}
           <div className="space-y-2">
             <Label>Description</Label>
-            <div className="border rounded-lg overflow-hidden">
-              <EditorPage onChange={setEditorJson} /> 
+            <div className="border h-100 rounded-lg overflow-hidden">
+              <EditorPage onChange={setEditorJson} />
               {/* 👈 pass a callback to capture JSON */}
             </div>
           </div>
 
           {/* Action Buttons */}
           <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-4 border-t">
-            <Button type="button" variant="secondary" className="w-full sm:w-auto">
+            <Button
+              type="button"
+              variant="secondary"
+              className="w-full sm:w-auto"
+            >
               Cancel
             </Button>
-            <Button type="submit" className="w-full sm:w-auto">
-              {
-                loading ? <Loader className="animate-spin" /> : "Create"
-              }
+            <Button
+              type="submit"
+              className="w-full sm:w-auto"
+              disabled={loading}
+            >
+              {loading ? <Loader className="animate-spin" /> : "Create"}
             </Button>
           </div>
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;
