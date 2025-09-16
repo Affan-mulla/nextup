@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:serif="http://www.serif.com/" width="100%" height="100%" viewBox="0 0 330 261" version="1.1" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;">
+    <g id="Layer-1" serif:id="Layer 1" transform="matrix(1,0,0,1,-399.134,-195.394)">
+        <g id="rect1017" transform="matrix(1,0,0,0.642393,0,116.514)">
+            <rect x="399.134" y="122.791" width="329.778" height="406.007" style="fill:rgb(238,238,238);"/>
+        </g>
+        <g id="g1015" transform="matrix(1,0,0,1,43.7782,213.321)">
+            <g id="rect1002" transform="matrix(0.959595,-0.281384,0.281384,0.959595,0,0)">
+                <rect x="398.758" y="178.747" width="82.49" height="90.47" style="fill:rgb(159,159,159);"/>
+            </g>
+            <g id="g1000" transform="matrix(0.959705,0.281011,-0.281011,0.959705,-30.2737,-158.672)">
+                <rect id="rect961" x="547.186" y="1.65" width="107.834" height="115.966" style="fill:url(#_Linear1);stroke:white;stroke-width:5.4px;"/>
+                <g id="g875" transform="matrix(0.172655,0,0,0.172655,512.493,-6.32965)">
+                    <rect id="rect3338" x="270" y="107.362" width="491.106" height="449.998" style="fill:rgb(204,204,204);stroke:white;stroke-width:13.07px;"/>
+                    <rect id="rect3342" x="270" y="107.362" width="491.106" height="210" style="fill:white;stroke:white;stroke-width:13.07px;"/>
+                    <path id="path3344" d="M300,317.363L338.461,263.824L398.992,218.664L414.875,237.237L428.488,198.554L436.689,195.572L450,167.363L630,347.363" style="fill:rgb(204,204,204);stroke:white;stroke-width:13.07px;"/>
+                    <g id="path3390-0" transform="matrix(1,0,0,1,270,107.362)">
+                        <path d="M180,60C184.093,76.475 187.712,93.067 190.852,109.75C193.234,122.411 195.34,135.124 197.168,147.877L175.104,140.717L128.992,111.301L134.316,157.727L132.701,182.514L142.754,212.891L215.939,201.135L300,180L252.199,102.566L242.5,117.5L215.375,95.375L180,60Z" style="fill:rgb(179,179,179);stroke:white;stroke-width:13.07px;"/>
+                    </g>
+                    <path id="path3358" d="M420,347.363L501.899,272.933L520.405,263.253L544.056,219.064L570,197.363L750,377.362" style="fill:rgb(204,204,204);stroke:white;stroke-width:13.07px;"/>
+                    <path id="path3386" d="M570,197.363L605.939,278.276L605.939,338.496L628.397,357.963C634.922,351.513 642.546,346.178 650.842,342.258C665.666,335.254 682.18,332.899 698.012,328.636C704.44,326.906 710.919,324.782 716.226,320.764C717.577,319.74 718.842,318.601 720,317.363L690,317.363L649.478,276.812L619.622,227.893L609.369,236.732L570,197.363Z" style="fill:rgb(179,179,179);stroke:white;stroke-width:13.07px;"/>
+                    <path id="path3370" d="M420,557.362C419.583,547.761 411.182,539.753 437.125,526.694C468.957,510.67 563.02,490.806 589.279,466.71C608.706,448.883 518.863,429.04 534.26,407.637C541.241,397.931 593.297,387.667 616.406,377.363C638.312,367.595 631.547,357.559 647.811,347.388C663.52,337.562 716.161,327.614 720,317.363C709.586,327.884 651.166,337.766 630,347.363C607.662,357.491 608.531,367.293 580.569,376.846C550.444,387.139 491.427,397.399 477.861,407.363C449.448,428.231 524.724,449.963 494.063,467.363C452.543,490.926 344.722,510.657 300,527.363C269.096,538.906 271.592,545.111 270,557.362" style="fill:white;stroke:white;stroke-width:13.07px;"/>
+                </g>
+            </g>
+        </g>
+        <g id="text1021" transform="matrix(1,0,0,1,0,-14.7211)">
+            <g transform="matrix(1,0,0,1,562.007,412.125)">
+                <text x="-80.891px" y="0px" style="font-family:'Arial-BoldMT', 'Arial', sans-serif;font-weight:700;font-size:32px;fill:rgb(118,118,118);">NO IMAGE</text>
+            </g>
+            <g transform="matrix(1,0,0,1,562.007,452.125)">
+                <text x="-89.18px" y="0px" style="font-family:'Arial-BoldMT', 'Arial', sans-serif;font-weight:700;font-size:32px;fill:rgb(118,118,118);">A<tspan x="-68.445px -49.477px -26.367px " y="0px 0px 0px ">VAI</tspan>LABLE</text>
+            </g>
+        </g>
+    </g>
+    <defs>
+        <linearGradient id="_Linear1" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(-1.60852,102.177,-102.177,-1.60852,614.812,6.95311)"><stop offset="0" style="stop-color:rgb(194,194,194);stop-opacity:1"/><stop offset="1" style="stop-color:rgb(159,159,159);stop-opacity:1"/></linearGradient>
+    </defs>
+</svg>

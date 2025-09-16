@@ -178,6 +178,7 @@ export function InsertImageDialog({
   }, [activeEditor]);
 
   const onClick = (payload: InsertImagePayload) => {
+      console.log("Insert image payload:", payload); // <--- check src here
     activeEditor.dispatchCommand(INSERT_IMAGE_COMMAND, payload);
     onClose();
   };

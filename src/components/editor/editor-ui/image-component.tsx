@@ -102,7 +102,7 @@ function LazyImage({
 function BrokenImage(): JSX.Element {
   return (
     <img
-      src={""}
+      src={"imageP.svg"}
       style={{
         height: 200,
         opacity: 0.2,
