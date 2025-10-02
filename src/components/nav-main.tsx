@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRight, Sparkle, Sparkles, type LucideIcon } from "lucide-react";
+import { ChevronRight, Sparkles, type LucideIcon } from "lucide-react";
 
 import {
   Collapsible,
@@ -9,10 +9,7 @@ import {
 } from "@/components/ui/collapsible";
 import {
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuAction,
-  SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubButton,

@@ -1,5 +1,4 @@
 "use client";
-import EditorPage from "@/app/editor-x/page";
 import ProductSelector from "@/components/forms/ProductSelector";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,22 +8,16 @@ import { useState } from "react";
 import { IdeaData, IdeaDataSchema } from "@/lib/validation";
 import { useStore } from "@/store/store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Loader } from "lucide-react";
 import { replaceImagesFromLexical } from "@/hooks/useReplaceImage";
 import { base64ToFile } from "@/hooks/baseToFile";
 import { useExtractImagesFromLexical } from "@/hooks/useGetImage";
+import { Editor } from "@/components/blocks/editor-x/editor";
 
-type LexicalNode = any;
-
-interface ReplaceOpts {
-  maxImages?: number; // optional cap (e.g. 2)
-  failIfInsufficientUrls?: boolean; // throw if urls < images found
-}
 const Page = () => {
-  const user = useStore((state: any) => state.user);
+  const user = useStore((state : any) => state.user);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [editorJson, setEditorJson] = useState<any>(null);
@@ -86,7 +79,7 @@ const Page = () => {
     if (images.length > 0) {
       const uploadedImages = await imagesExist(images);
       const imageUrls = uploadedImages.map((image) => image.publicUrl);
-    
+
       // Replace image URLs in editor JSON
       const replacedEditorJson = replaceImagesFromLexical(
         editorJson.root,
@@ -151,8 +144,10 @@ const Page = () => {
           <div className="space-y-2">
             <Label>Description</Label>
             <div className="border h-100 rounded-lg overflow-hidden">
-              <EditorPage onChange={setEditorJson} />
-              {/* 👈 pass a callback to capture JSON */}
+              <Editor
+                editorSerializedState={editorJson}
+                onSerializedChange={setEditorJson}
+              />
             </div>
           </div>
 

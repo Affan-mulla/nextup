@@ -1,6 +1,5 @@
 import withAuth from "next-auth/middleware"
 import { NextResponse } from "next/server"
-import { useStore } from "./store/store"
 
 export default withAuth(
   function middleware(req) {

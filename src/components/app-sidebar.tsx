@@ -3,27 +3,14 @@
 import * as React from "react";
 import {
   ArrowBigUpDash,
-  BookOpen,
-  Bot,
   Brain,
-  Command,
   Compass,
-  Frame,
   Home,
-  LifeBuoy,
-  Map,
-  PieChart,
-  Send,
-  Settings2,
-  Sparkles,
-  SquareTerminal,
   Star,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavProjects } from "@/components/nav-projects";
-import { NavSecondary } from "@/components/nav-secondary";
-import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
