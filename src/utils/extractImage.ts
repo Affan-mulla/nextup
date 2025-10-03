@@ -1,10 +1,7 @@
-type LexicalNode = {
-  type?: string;
-  src?: string;
-  children?: LexicalNode[];
-};
+import { LexicalJsonNode } from "@/types/lexical-json";
 
-export function extractImagesFromLexical(node?: LexicalNode, images: LexicalNode[] = []) {
+
+export function extractImagesFromLexical(node?: LexicalJsonNode, images: LexicalJsonNode[] = []) {
     
     if (!node) return images;
 

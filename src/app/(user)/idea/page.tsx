@@ -15,8 +15,11 @@ import { replaceImagesFromLexical } from "@/utils/replaceImage";
 import { base64ToFile } from "@/utils/baseToFile";
 import { extractImagesFromLexical } from "@/utils/extractImage";
 import { Editor } from "@/components/blocks/editor-x/editor";
-import { SerializedEditorState, SerializedLexicalNode } from "lexical";
+import { LexicalNode, SerializedEditorState, SerializedLexicalNode } from "lexical";
 import { Store } from "@/types/store-types";
+import { LexicalJsonNode } from "@/types/lexical-json";
+
+type ImageInput = { src: string };
 
 const Page = () => {
   const user = useStore((state : Store) => state.user);
@@ -61,9 +64,9 @@ const Page = () => {
     return { publicUrl, path };
   }
 
-  const imagesExist = async (images: unknown[]) => {
-    const imagesFile = images.map((image: { src: string }) => {
-      const file = base64ToFile(image.src, `image-${Date.now()}.png`);
+  const imagesExist = async (images: LexicalJsonNode[]) => {
+    const imagesFile = images.map( (image :  LexicalJsonNode) => {
+      const file = base64ToFile(image.src || "", `image-${Date.now()}.png`);
       return file;
     });
 
