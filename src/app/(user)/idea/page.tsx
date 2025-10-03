@@ -11,16 +11,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Loader } from "lucide-react";
-import { replaceImagesFromLexical } from "@/hooks/useReplaceImage";
-import { base64ToFile } from "@/hooks/baseToFile";
-import { useExtractImagesFromLexical } from "@/hooks/useGetImage";
+import { replaceImagesFromLexical } from "@/utils/replaceImage";
+import { base64ToFile } from "@/utils/baseToFile";
+import { extractImagesFromLexical } from "@/utils/extractImage";
 import { Editor } from "@/components/blocks/editor-x/editor";
+import { SerializedEditorState, SerializedLexicalNode } from "lexical";
+import { Store } from "@/types/store-types";
 
 const Page = () => {
-  const user = useStore((state : any) => state.user);
+  const user = useStore((state : Store) => state.user);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [editorJson, setEditorJson] = useState<any>(null);
+  const [editorJson, setEditorJson] = useState<SerializedEditorState<SerializedLexicalNode>>();
 
   const {
     handleSubmit,
@@ -59,8 +61,8 @@ const Page = () => {
     return { publicUrl, path };
   }
 
-  const imagesExist = async (images: any[]) => {
-    const imagesFile = images.map((image: any) => {
+  const imagesExist = async (images: unknown[]) => {
+    const imagesFile = images.map((image: { src: string }) => {
       const file = base64ToFile(image.src, `image-${Date.now()}.png`);
       return file;
     });
@@ -72,9 +74,9 @@ const Page = () => {
     return uploadedImages;
   };
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: IdeaData) => {
     setLoading(true);
-    const images = useExtractImagesFromLexical(editorJson.root);
+    const images = extractImagesFromLexical(editorJson?.root);
 
     if (images.length > 0) {
       const uploadedImages = await imagesExist(images);
@@ -82,10 +84,10 @@ const Page = () => {
 
       // Replace image URLs in editor JSON
       const replacedEditorJson = replaceImagesFromLexical(
-        editorJson.root,
+        editorJson?.root,
         imageUrls
       );
-      setEditorJson(replacedEditorJson);
+      setEditorJson(JSON.parse(JSON.stringify(replacedEditorJson)));
     }
 
     // attach editor JSON before submit

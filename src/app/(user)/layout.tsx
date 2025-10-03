@@ -1,13 +1,14 @@
 "use client";
 
 import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import {  SidebarProvider } from "@/components/ui/sidebar";
 import { SessionProvider, useSession } from "next-auth/react";
 import Header from "../_components/Header";
 import { useEffect, useState } from "react";
 import { useStore } from "@/store/store";
 import { Loader } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Store } from "@/types/store-types";
 
 export default function UserLayout({
   children,
@@ -23,8 +24,8 @@ export default function UserLayout({
 
 function Content({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
-  const user = useStore((state: any) => state.user);
-  const setUser = useStore((state: any) => state.setUser);
+  const user = useStore((state: Store) => state.user);
+  const setUser = useStore((state: Store) => state.setUser);
 
   const [loading, setLoading] = useState(true);
 

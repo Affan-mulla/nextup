@@ -4,13 +4,10 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 export default function ErrorPage() {
-  const searchParams = useSearchParams();
-  const error = searchParams.get("error");
+  // const searchParams = useSearchParams();
+  // const error = searchParams.get("error");
 
-  const message =
-    error === "Verification"
-      ? "This verification link is invalid or has expired."
-      : "Something went wrong. Please try again.";
+  const message =" Something went wrong. Please try again.";
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-neutral-950 text-white px-4">

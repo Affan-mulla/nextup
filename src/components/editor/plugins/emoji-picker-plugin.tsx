@@ -137,7 +137,7 @@ export function EmojiPickerPlugin() {
   )
 
   return (
-    // @ts-ignore
+    // @ts-expect-error LexicalTypeaheadMenuPlugin
     <LexicalTypeaheadMenuPlugin<EmojiOption>
       onQueryChange={setQueryString}
       onSelectOption={onSelectOption}

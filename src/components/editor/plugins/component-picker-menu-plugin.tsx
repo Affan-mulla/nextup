@@ -87,7 +87,7 @@ export function ComponentPickerMenuPlugin({
   return (
     <>
       {modal}
-      {/* @ts-ignore */}
+      {/* @ts-expect-error Type 'JSX.Element' is not assignable to type 'JSX.Element | null'. */}
       <LexicalTypeaheadMenuPlugin<ComponentPickerOption>
         onQueryChange={setQueryString}
         onSelectOption={onSelectOption}

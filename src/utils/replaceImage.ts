@@ -1,4 +1,4 @@
-type LexicalNode = any;
+import { LexicalJsonNode } from "@/types/lexical-json";
 
 interface ReplaceOpts {
   maxImages?: number; // optional cap (e.g. 2)
@@ -6,25 +6,24 @@ interface ReplaceOpts {
 }
 
 export function replaceImagesFromLexical(
-  root: LexicalNode,
+  root: LexicalJsonNode | undefined,
   urls: string | string[],
   opts: ReplaceOpts = {}
-): LexicalNode {
+): LexicalJsonNode | undefined {
   if (!root) return root;
 
   // Normalize urls to array
-  const urlArray = typeof urls === "string" ? [urls] : (urls ?? []);
-  // Deep clone to avoid mutating original
-  const cloned = JSON.parse(JSON.stringify(root));
+  const urlArray = typeof urls === "string" ? [urls] : urls;
+  const cloned: LexicalJsonNode = JSON.parse(JSON.stringify(root));
+
   let imgIndex = 0;
   let foundImages = 0;
 
-  function traverse(node: any): any {
-    if (!node || typeof node !== "object") return node;
-
+  function traverse(node: LexicalJsonNode): LexicalJsonNode {
     // If this node is an image node, replace src
     if (node.type === "image" && typeof node.src === "string") {
       foundImages++;
+
       if (opts.maxImages !== undefined && foundImages > opts.maxImages) {
         throw new Error(`Max ${opts.maxImages} images allowed`);
       }
@@ -36,7 +35,6 @@ export function replaceImagesFromLexical(
         return node; // nothing to replace
       }
 
-      // If fewer URLs than images, use the last URL by default (or throw if requested)
       if (imgIndex >= urlArray.length) {
         if (opts.failIfInsufficientUrls) {
           throw new Error("Not enough URLs provided for all images");
@@ -50,14 +48,23 @@ export function replaceImagesFromLexical(
       return node;
     }
 
-    // Recurse arrays
-    if (Array.isArray(node)) {
-      return node.map(traverse);
+    // Recurse into children
+    if (Array.isArray(node.children)) {
+      node.children = node.children.map(traverse);
     }
 
-    // Recurse object properties (covers nested editorState / caption fields)
+    // Recurse into any other object-like fields
     for (const key of Object.keys(node)) {
-      node[key] = traverse(node[key]);
+      const value = node[key];
+      if (value && typeof value === "object") {
+        if (Array.isArray(value)) {
+          node[key] = value.map((v: LexicalJsonNode) =>
+            typeof v === "object" ? traverse(v as LexicalJsonNode) : v
+          );
+        } else {
+          node[key] = traverse(value as LexicalJsonNode);
+        }
+      }
     }
 
     return node;

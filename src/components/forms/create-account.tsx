@@ -58,8 +58,7 @@ const CreateAccount = ({
     },
   });
 
-  const onSubmit = async(data: any) => {
-    console.log(data);
+  const onSubmit = async(data: SignUpData) => {
     
     try {
       setLoading(true);

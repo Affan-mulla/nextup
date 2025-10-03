@@ -17,13 +17,14 @@ import { signOut } from 'next-auth/react'
 import { useStore } from '@/store/store'
 import { ModeToggle } from '@/components/ui/dark-mode-toggle'
 import Link from 'next/link'
+import { Store } from '@/types/store-types'
 
 const Profile = () => {
-   const user = useStore((state : any) => state.user);
+   const user = useStore((state : Store) => state.user);
   return (
     <DropdownMenu>
           <DropdownMenuTrigger asChild className='h-full'>
-              <Avatar className="h-9 w-9 rounded-lg">
+              <Avatar className="h-9 w-9 rounded-md">
                 <AvatarImage src={user?.image || "Placeholder.svg"} alt={user?.name || "Placeholder"} />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>

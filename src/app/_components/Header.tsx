@@ -8,9 +8,10 @@ import { Bell, PlusCircle } from 'lucide-react'
 import Profile from './Profile'
 import { Button } from '@/components/ui/button'
 import { useStore } from '@/store/store'
+import { Store } from '@/types/store-types'
 
 const Header = () => {
-   const data = useStore((state : any) => state.user);
+   const data = useStore((state : Store) => state.user);
 
   return (
      <header className="flex h-16  shrink-0 border-b items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
@@ -30,12 +31,12 @@ const Header = () => {
                 <div className="flex items-center gap-3 h-full">
                   <Link
                     href="/idea"
-                    className="flex items-center gap-1 h-full font-inter rounded-lg bg-secondary px-3 py-2 text-sm font-medium hover:bg-secondary-foreground/10 transition-colors"
+                    className="flex shadow-sm hover:shadow-muted-foreground/40  items-center gap-1 h-full font-inter rounded-md bg-secondary px-4 py-2 text-sm font-medium hover:bg-secondary-foreground/10 transition-colors"
                   >
                     <PlusCircle size={20} />
                     <p className="ml-1">Create</p>
                   </Link>
-                  <Link href="/notifications" className="flex h-9 w-9 items-center justify-center rounded-lg bg-secondary hover:bg-secondary-foreground/10 transition-colors">
+                  <Link href="/notifications" className="flex h-9 w-9 items-center justify-center rounded-md bg-secondary hover:bg-secondary-foreground/10 transition-colors">
                     <Bell className="h-5 w-5" />
                   </Link>
 

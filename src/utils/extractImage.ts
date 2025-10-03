@@ -1,4 +1,10 @@
-export function useExtractImagesFromLexical(node: any, images: any[] = []) {
+type LexicalNode = {
+  type?: string;
+  src?: string;
+  children?: LexicalNode[];
+};
+
+export function extractImagesFromLexical(node?: LexicalNode, images: LexicalNode[] = []) {
     
     if (!node) return images;
 
@@ -10,7 +16,7 @@ export function useExtractImagesFromLexical(node: any, images: any[] = []) {
     // If this node has children, recurse
     if (Array.isArray(node.children)) {
       for (const child of node.children) {
-        useExtractImagesFromLexical(child, images);
+        extractImagesFromLexical(child, images);
       }
     }
 

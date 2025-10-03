@@ -42,7 +42,7 @@ const Page = () => {
         children: [
           {
             type: "paragraph",
-             // @ts-ignore
+            //@ts-expect-error no idea why it yells at me here
             format: "",
             indent: 0,
             version: 1,

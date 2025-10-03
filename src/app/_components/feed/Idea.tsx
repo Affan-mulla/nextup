@@ -4,7 +4,7 @@ import React from "react";
 import IdeaHeader from "./IdeaHeader";
 import IdeaContent from "./IdeaContent";
 import Action from "./Action";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/utils/use-mobile";
 
 const Idea = () => {
   const mobile = useIsMobile();

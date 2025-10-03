@@ -22,13 +22,15 @@ export const SignInSchema = z.object({
 
 export type SignInData = z.infer<typeof SignInSchema>;
 
-
+const LexicalJsonSchema = z.any();
 
 export const IdeaDataSchema = z.object({
   title : z.string().min(4, "Title must be between 4 and 30 characters").max(200, "Title must be between 4 and 30 characters"),
   productId : z.string(),
   userId : z.string(),
-  description : z.object({}).optional(),
+  description: LexicalJsonSchema.optional(),   // 👈 accept Lexical JSON
 })
 
-export type IdeaData = z.infer<typeof IdeaDataSchema>;
+export type IdeaData = z.infer<typeof IdeaDataSchema> & {
+  description?: z.infer<typeof LexicalJsonSchema>;
+};

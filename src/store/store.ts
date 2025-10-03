@@ -1,15 +1,10 @@
 
+import { Store, User } from '@/types/store-types'
 import { create } from 'zustand'
 
-type User = {
-    id: string,
-    email: string,
-    name: string,
-    role: string,
-    image?: string
-}
 
-export const useStore = create((set) => ({
+
+export const useStore = create<Store>((set) => ({
     user : {
         id: "",
         email: "",
@@ -17,6 +12,5 @@ export const useStore = create((set) => ({
         role: "",
         image: ""
     },
-    setUser : (user : User) => set({user})
-
+    setUser : (user : User) => set(()=> ({ user }))
 }))
