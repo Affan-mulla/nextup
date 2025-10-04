@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { getServerSession } from "next-auth"; // if you're using next-auth
-import Error from "next/error";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,

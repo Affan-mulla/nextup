@@ -1,11 +1,11 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/session";
 import { Session } from "next-auth";
 import { redirect } from "next/navigation";
 
 export default async function  Home() {
-  const session = await auth() as Session | null;
+  const session : Session | null = await getSession();
   console.log(session);
   
   if(!session  ) {
