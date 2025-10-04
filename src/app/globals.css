@@ -110,6 +110,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.646 0.222 41.116);
+  --button-gradient: linear-gradient(135deg, #09090b, #1b1b1b);
 }
 
 @layer base {

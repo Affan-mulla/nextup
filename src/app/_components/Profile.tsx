@@ -23,7 +23,7 @@ const Profile = () => {
    const user = useStore((state : Store) => state.user);
   return (
     <DropdownMenu>
-          <DropdownMenuTrigger asChild className='h-full'>
+          <DropdownMenuTrigger asChild className='h-full border border-border rounded-md hover:bg-secondary-foreground/10 transition-colors'>
               <Avatar className="h-9 w-9 rounded-md">
                 <AvatarImage src={user?.image || "Placeholder.svg"} alt={user?.name || "Placeholder"} />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>

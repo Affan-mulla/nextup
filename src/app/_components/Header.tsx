@@ -31,12 +31,12 @@ const Header = () => {
                 <div className="flex items-center gap-3 h-full">
                   <Link
                     href="/idea"
-                    className="flex shadow-sm hover:shadow-muted-foreground/40  items-center gap-1 h-full font-inter rounded-md bg-secondary px-4 py-2 text-sm font-medium hover:bg-secondary-foreground/10 transition-colors"
+                    className="flex  border border-border  items-center gap-1 h-full font-inter rounded-md bg-secondary px-4 py-2 text-sm font-medium hover:bg-secondary-foreground/10 transition-colors"
                   >
                     <PlusCircle size={20} />
                     <p className="ml-1">Create</p>
                   </Link>
-                  <Link href="/notifications" className="flex h-9 w-9 items-center justify-center rounded-md bg-secondary hover:bg-secondary-foreground/10 transition-colors">
+                  <Link href="/notifications" className="flex h-9 w-9 items-center justify-center rounded-md bg-secondary border border-border hover:bg-secondary-foreground/10 transition-colors">
                     <Bell className="h-5 w-5" />
                   </Link>
 
