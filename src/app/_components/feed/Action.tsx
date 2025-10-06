@@ -1,7 +1,16 @@
 import { ArrowBigDownDash, ArrowBigUpDash, MessageCircleMore } from "lucide-react";
 import React from "react";
 
-const Action = () => {
+const Action = ({votes, comments}: {votes: number, comments: number}) => {
+  const upvote = () => {
+    // Handle upvote logic here
+  }
+
+  const downvote = () => {
+    // Handle downvote logic here
+  }
+
+  
   return (
     <>
       {/* Voting */}
@@ -12,7 +21,7 @@ const Action = () => {
         </button>
 
         {/* Vote Count */}
-        <span className="text-sm font-medium text-foreground">128</span>
+        <span className="text-sm font-medium text-foreground">{votes}</span>
 
         {/* Downvote */}
         <button className="flex flex-col items-center justify-center rounded-xl md:p-2 p-1 hover:bg-muted transition">
@@ -26,7 +35,7 @@ const Action = () => {
         <button className="group flex items-center gap-2 rounded-xl bg-card md:px-3 px-2 md:py-2 py-1 transition-all duration-200 ease-out hover:scale-105 active:scale-95 ">
           <MessageCircleMore className="size-5 text-muted-foreground transition-colors group-hover:text-primary" />
           <span className="text-sm font-medium text-muted-foreground transition-colors group-hover:text-primary">
-            100
+            {comments} Comments
           </span>
         </button>
       </div>

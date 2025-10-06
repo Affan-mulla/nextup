@@ -5,45 +5,54 @@ import IdeaHeader from "./IdeaHeader";
 import IdeaContent from "./IdeaContent";
 import Action from "./Action";
 import { useIsMobile } from "@/utils/use-mobile";
+import { IdeaType } from "@/types/api-data-types";
+import { useRouter } from "next/navigation";
 
-const Idea = () => {
+const Idea = ({idea} : {idea : IdeaType}) => {
   const mobile = useIsMobile();
+  const timeAgo = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    if (seconds < 60) return `${seconds} seconds ago`;
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes} minutes ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours} hours ago`;
+    const days = Math.floor(hours / 24);
+    if (days < 7) return `${days} days ago`;
+    const weeks = Math.floor(days / 7);
+    if (weeks < 4) return `${weeks} weeks ago`;
+    const months = Math.floor(weeks / 4);
+    if (months < 12) return `${months} months ago`;
+    const years = Math.floor(months / 12);
+    return `${years} years ago`;
+  };
+  const router = useRouter();
   return (
-    <div className="w-full min-h-[100px] flex p-3 gap-4 border-b">
-      {/* Feature Image */}
-      <div className="md:h-[100px] md:w-[100px] h-[70px] w-[70px] flex-shrink-0 flex justify-center items-center rounded-xl border overflow-hidden relative bg-muted/30 backdrop-blur-sm">
-        <Image
-          src="IdeaImgPlaceholder.svg"
-          alt="Idea thumbnail"
-          width={100}
-          height={100}
-          className={`object-cover transition-all
-      ${
-        "IdeaImgPlaceholder.svg".includes("Placeholder")
-          ? "w-1/2 h-1/2 object-contain" // small, centered for placeholder
-          : "w-full h-full object-cover" // normal image
-      }`}
-        />
-      </div>
+    <div className="w-full min-h-[100px] flex p-3 gap-4 border-b cursor-pointer hover:bg-accent/20 duration-200"
+    onClick={() => {
+      router.push(`/idea/${idea.id}`);
+    }}>
 
       {/* Feature Content Box*/}
       <div className="flex flex-1 justify-between md:gap-0 gap-4 ">
         {/* Feature Content */}
         <div className="flex flex-col gap-2">
           <IdeaHeader
-            username="username"
-            time="2h ago"
-            avatar="Placeholder.svg"
+            username={idea.author.name}
+            time={timeAgo(idea.createdAt.toString())}
+            avatar={idea.author.image || "AvatarPlaceholder.png"}
           />
-          <IdeaContent
-            heading="Create a Theme Switcher Component with Tailwind and shadcn."
+          <IdeaContent votes={idea.votesCount} comments={idea._count.comments}
+            heading={idea.title}
             isMobile={mobile}
           />
         </div>
 
         {mobile === false && (
           <div className="md:gap-3 gap-2 md:mt-3 justify-between  items-center hidden md:flex">
-            <Action />
+            <Action votes={idea.votesCount} comments={idea._count.comments} />
           </div>
         )}
       </div>

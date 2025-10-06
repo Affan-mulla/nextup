@@ -18,7 +18,7 @@ const IdeaHeader = ({username , time,avatar} : IdeaProps) => {
       >
         <Image
           src={avatar}
-          className="mr-2"
+          className="mr-2 rounded-full"
           alt=""
           width={18}
           height={18}
