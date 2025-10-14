@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { useStore } from "@/store/store";
 import { Store } from "@/types/store-types";
 import { animate, motion } from "motion/react";
+import ProfileDropdown from "@/components/kokonutui/profile-dropdown";
 const Header = () => {
   const data = useStore((state: Store) => state.user);
 
@@ -72,9 +73,6 @@ const Header = () => {
                   <Bell className="h-5 w-5 z-100" />
                 </motion.div>
               </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.05 }}>
-              <Profile />
             </motion.div>
           </div>
         ) : (

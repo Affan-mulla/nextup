@@ -28,7 +28,7 @@ export function NavMain({
 } : NavMainProps) {
   const [isOpen, setIsOpen] = useState(true);
   return (
-    <SidebarGroup>
+    <SidebarGroup className="flex-1">
       <SidebarMenu>
           <Collapsible asChild defaultOpen={true} open={isOpen} onOpenChange={setIsOpen}>
             <SidebarMenuItem className="">

@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { Separator } from "./ui/separator";
+import ProfileDropdown from "./kokonutui/profile-dropdown";
 
 const data = {
   products: [
@@ -84,10 +85,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent >
         <NavProjects projects={data.projects} />
         <Separator />
         <NavMain products={data.products} />
+      
+        <ProfileDropdown/>
       </SidebarContent>
       <SidebarFooter></SidebarFooter>
     </Sidebar>
