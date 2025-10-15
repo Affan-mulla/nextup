@@ -24,7 +24,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { SignUpData, SignUpSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -69,10 +69,11 @@ const CreateAccount = ({
         toast.success("Account created! Please check your email to sign in.");
         router.push("/auth/verify");
       }
-
     } catch (error) {
-      console.error(error);
-      toast.error("Something went wrong. Please try again.");
+      console.log(error);
+      if(error instanceof AxiosError)        
+        toast.error(error.status === 409 ? "User already exists" : "Error creating account");
+
     }
     finally{
       setLoading(false);

@@ -27,7 +27,7 @@ export async function POST(request: Request) {
       where: { email: parsed.email },
     });
     if (existingUser) {
-      return new Response("User already exists", { status: 400 });
+      return new Response("User already exists", { status: 409 });
     }
     const hashedPassword = await hash(parsed.password, 10);
     const user = await prisma.user.create({
