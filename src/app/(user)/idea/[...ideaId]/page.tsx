@@ -1,11 +1,13 @@
 "use client";
 import WrapperDescriptionDisplay from "@/app/_components/Idea/DescriptionDisplay";
 import UserDetail from "@/app/_components/Idea/UserDetail";
+import Loader from "@/components/kokonutui/loader";
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import axios from "axios";
 import { SerializedEditorState } from "lexical";
-import { ArrowLeft, Ellipsis, Loader } from "lucide-react";
+import { ArrowLeft, Ellipsis } from "lucide-react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -94,7 +96,7 @@ const Page = () => {
   }, [ideaId]);
 
   if (loading) {
-    return <Loader className="animate-spin" />;
+    return <Loader size="sm" />;
   }
   return (
     <div className="md:px-6 px-3 py-4 w-full h-full">
@@ -103,13 +105,12 @@ const Page = () => {
         <div className="flex items-center justify-between flex-shrink-0">
           {/* Left side: back + user/product */}
           <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full bg-muted transition-colors"
+            <Link
+              href="/feed"
+              className="p-2 rounded-full bg-muted transition-colors hover:bg-muted/80"
             >
               <ArrowLeft size={22} />
-            </Button>
+            </Link>
 
             <UserDetail
               product={data?.company.name || ""}

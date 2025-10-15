@@ -2,17 +2,18 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import React from "react";
-import Searchbar from "./Searchbar";
 import Link from "next/link";
 import { Bell, PlusCircle } from "lucide-react";
-import Profile from "./Profile";
 import { Button } from "@/components/ui/button";
 import { useStore } from "@/store/store";
 import { Store } from "@/types/store-types";
 import { animate, motion } from "motion/react";
-import ProfileDropdown from "@/components/kokonutui/profile-dropdown";
+import { useIsMobile } from "@/utils/use-mobile";
+import Image from "next/image";
+import SearchBar from "./searchBar/SearchBar";
 const Header = () => {
   const data = useStore((state: Store) => state.user);
+  const isMobile = useIsMobile();
 
   return (
     <header className="flex h-16  shrink-0 border-b items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
@@ -25,11 +26,11 @@ const Header = () => {
           />
         </div>
 
-        <Searchbar />
+        <SearchBar/>
 
         {/* Right */}
         {data ? (
-          <div className="flex items-center gap-3 h-full">
+          <div className="flex items-center md:gap-3 gap-1.5 h-full">
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
@@ -39,41 +40,60 @@ const Header = () => {
                 href="/idea"
                 className="relative flex items-center gap-2 rounded-lg border border-border
              bg-gradient-to-br from-primary/10 via-primary/5 to-transparent
-             backdrop-blur-md px-5 py-2 text-sm font-medium text-foreground
+             backdrop-blur-md md:px-5 md:py-2 p-2 text-sm font-medium text-foreground
              transition-all duration-300 overflow-hidden group
              shadow-sm 
-             shadow-foreground/10 dark:shadow-primary/10  hover:shadow-foreground/20 dark:hover:shadow-primary/20
+             shadow-foreground/10 dark:shadow-primary/20  hover:shadow-foreground/20 dark:hover:shadow-primary/20
            "
               >
                 <PlusCircle
                   size={20}
                   className="text-primary transition-transform duration-300 group-hover:rotate-180 z-10"
                 />
-                <p className="font-medium z-10">Create</p>
+                {!isMobile && <p className="font-medium z-10">Create</p>}
               </Link>
             </motion.div>
 
-            <motion.div whileHover={{ scale: 1.05 }}>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              onHoverStart={() => {
+                animate(
+                  ".notification-bell",
+                  { rotate: [0, 15, -15, 0] },
+                  { duration: 0.5, ease: "easeInOut" }
+                );
+              }}
+            >
               <Link
                 href="/notifications"
                 className=" p-2 rounded-lg hover:bg-accent/50 transition-colors duration-200 flex items-center justify-center
-                border border-border shadow-sm  shadow-foreground/10  hover:shadow-foreground/10
-           "
+                border border-border
+                dark:shadow-md shadow-sm 
+             shadow-foreground/10 dark:shadow-accent/50  hover:shadow-foreground/20"
               >
-                <motion.div
-                  onHoverStart={() => {
-                    animate(
-                      ".notification-bell",
-                      { rotate: [0, 15, -15, 0] },
-                      { duration: 0.5, ease: "easeInOut" }
-                    );
-                  }}
-                  className="notification-bell"
-                >
+                <motion.div className="notification-bell">
                   <Bell className="h-5 w-5 z-100" />
                 </motion.div>
               </Link>
             </motion.div>
+
+            {isMobile && (
+              <div className="w-9 h-9 relative">
+                <Link
+                  href={`/u/${data.name}`}
+                  className="block w-full h-full rounded-lg border border-border
+                 overflow-hidden "
+                >
+                  <Image
+                    src={data.image || "/Placeholder.webp"}
+                    alt={data.name || "User"}
+                    width={40}
+                    height={40}
+                    className="w-full h-full aspect-square object-cover"
+                  />
+                </Link>
+              </div>
+            )}
           </div>
         ) : (
           <Link href="/auth/signin">

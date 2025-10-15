@@ -23,6 +23,7 @@ import {
 import Link from "next/link";
 import { Separator } from "./ui/separator";
 import ProfileDropdown from "./kokonutui/profile-dropdown";
+import { useIsMobile } from "@/utils/use-mobile";
 
 const data = {
   products: [
@@ -67,8 +68,9 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const isMobile = useIsMobile()
   return (
-    <Sidebar variant="inset" {...props}>
+    <Sidebar variant="inset"  {...props} className="border-r border-border">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -89,10 +91,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavProjects projects={data.projects} />
         <Separator />
         <NavMain products={data.products} />
-      
-        <ProfileDropdown/>
       </SidebarContent>
-      <SidebarFooter></SidebarFooter>
+      <SidebarFooter className="md:p-0   ">
+        {
+          !isMobile && (
+            <ProfileDropdown/>
+          )
+        }
+      </SidebarFooter>
     </Sidebar>
   );
 }

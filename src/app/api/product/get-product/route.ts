@@ -40,6 +40,7 @@ export async function GET(req  : NextRequest) {
         name: true,
         logoUrl: true,
       },
+      take: 10
     });
 
     if (!products) {

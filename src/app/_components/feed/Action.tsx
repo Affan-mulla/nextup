@@ -35,7 +35,7 @@ const Action = ({votes, comments}: {votes: number, comments: number}) => {
         <button className="group flex items-center gap-2 rounded-xl bg-card md:px-3 px-2 md:py-2 py-1 transition-all duration-200 ease-out hover:scale-105 active:scale-95 ">
           <MessageCircleMore className="size-5 text-muted-foreground transition-colors group-hover:text-primary" />
           <span className="text-sm font-medium text-muted-foreground transition-colors group-hover:text-primary">
-            {comments} Comments
+            {comments}
           </span>
         </button>
       </div>

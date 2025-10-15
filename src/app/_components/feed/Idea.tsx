@@ -36,9 +36,9 @@ const Idea = ({idea} : {idea : IdeaType}) => {
     }}>
 
       {/* Feature Content Box*/}
-      <div className="flex flex-1 justify-between md:gap-0 gap-4 ">
+      <div className="flex flex-1 md:px-6 justify-between md:gap-0 gap-4 w-full ">
         {/* Feature Content */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1 flex-1  ">
           <IdeaHeader
             username={idea.author.name}
             time={timeAgo(idea.createdAt.toString())}
