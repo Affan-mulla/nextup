@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Settings, CreditCard, LogOut, User, Moon, Sun } from "lucide-react";
+import { Settings, LogOut, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -11,7 +11,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Gemini from "./gemini";
 import Switcher4 from "../toggleSwitch";
 import { useStore } from "@/store/store";
 import { Store } from "@/types/store-types";
@@ -59,18 +58,6 @@ export default function ProfileDropdown({
       label: "Profile",
       href: `/u/${user.name}`,
       icon: <User className="w-4 h-4" />,
-    },
-    {
-      label: "Model",
-      value: data.model,
-      href: "#",
-      icon: <Gemini className="w-4 h-4" />,
-    },
-    {
-      label: "Subscription",
-      value: data.subscription,
-      href: "#",
-      icon: <CreditCard className="w-4 h-4" />,
     },
     {
       label: "Settings",
