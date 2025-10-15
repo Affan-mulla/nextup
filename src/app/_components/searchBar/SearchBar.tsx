@@ -2,10 +2,7 @@ import React from "react";
 import { motion, AnimatePresence, easeInOut } from "framer-motion";
 import {
   Building2,
-  Calendar,
-  CreditCard,
   Loader2,
-  Smile,
   User,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
