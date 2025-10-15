@@ -58,7 +58,7 @@ export async function POST(request: Request) {
 
     const emailSent = await sendEmail(
       user.email,
-      "http://localhost:3000/api/auth/signin"
+      "http://nextup-v7.vercel.app/auth/signin"
     );
 
     if (

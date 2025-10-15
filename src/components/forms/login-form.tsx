@@ -1,3 +1,4 @@
+"use client";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +17,9 @@ import { SignInData, SignInSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import React from "react";
+import { set } from "lodash";
+import { Loader2 } from "lucide-react";
 
 export function LoginForm({
   className,
@@ -24,6 +28,7 @@ export function LoginForm({
 
 
   const router = useRouter();
+  const [loading, setLoading] = React.useState(false);
 
 
   const githubHandler = () => {
@@ -43,6 +48,7 @@ export function LoginForm({
   });
 
   const credentialHandler = async (data: SignInData) => {
+    setLoading(true);
     const res = await signIn("credentials", {
       redirect: false,
       email: data.email,
@@ -56,6 +62,8 @@ export function LoginForm({
     } else {
       router.push(res?.url || "/ideas");
     }
+
+    setLoading(false);
   };
 
   return (
@@ -131,7 +139,9 @@ export function LoginForm({
                   )}
                 </div>
                 <Button type="submit" className="w-full ">
-                  Login
+                  {
+                    loading ? <Loader2 className=" animate-spin" /> : "Submit"
+                  }
                 </Button>
               </div>
               <div className="text-center text-sm font-inter">

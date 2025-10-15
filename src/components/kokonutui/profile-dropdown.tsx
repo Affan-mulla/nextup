@@ -77,13 +77,13 @@ export default function ProfileDropdown({
           <DropdownMenuTrigger asChild>
             <button
               type="button"
-              className="flex items-center gap-8 p-3 rounded-2xl bg-white dark:bg-background border-2 border-border  hover:border-accent hover:shadow-sm transition-all duration-200 focus:outline-none"
+              className="flex w-full items-center gap-8 p-3 rounded-2xl bg-white dark:bg-background border-2 border-border  hover:border-accent hover:shadow-sm transition-all duration-200 focus:outline-none"
             >
               <div className="text-left flex-1">
-                <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100 tracking-tight leading-tight">
+                <div className="text-md font-medium font-outfit text-zinc-900 dark:text-zinc-100 tracking-tight leading-tight">
                   {user.name || data.name}
                 </div>
-                <div className="text-xs text-zinc-500 dark:text-zinc-400 tracking-tight leading-tight">
+                <div className="text-xs text-wrap text-zinc-500 font-inter dark:text-zinc-400 tracking-tight leading-tight">
                   {user.email || data.email}
                 </div>
               </div>
@@ -107,7 +107,7 @@ export default function ProfileDropdown({
 
           <div
             className={cn(
-              "absolute -right-2 top-1/2 -translate-y-1/2 transition-all duration-200",
+              "absolute -right-3 top-1/2 -translate-y-1/2 transition-all duration-200",
               isOpen ? "opacity-100" : "opacity-60 group-hover:opacity-100"
             )}
           >

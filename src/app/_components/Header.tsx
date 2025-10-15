@@ -3,7 +3,7 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import React from "react";
 import Link from "next/link";
-import { Bell, PlusCircle } from "lucide-react";
+import { Bell, LogInIcon, PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useStore } from "@/store/store";
 import { Store } from "@/types/store-types";
@@ -14,6 +14,8 @@ import SearchBar from "./searchBar/SearchBar";
 const Header = () => {
   const data = useStore((state: Store) => state.user);
   const isMobile = useIsMobile();
+  console.log(data);
+  
 
   return (
     <header className="flex h-16  shrink-0 border-b items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
@@ -25,11 +27,10 @@ const Header = () => {
             className="mr-2 data-[orientation=vertical]:h-4"
           />
         </div>
-
         <SearchBar/>
 
         {/* Right */}
-        {data ? (
+        {data.id !== "" ? (
           <div className="flex items-center md:gap-3 gap-1.5 h-full">
             <motion.div
               whileHover={{ scale: 1.05 }}
@@ -97,7 +98,8 @@ const Header = () => {
           </div>
         ) : (
           <Link href="/auth/signin">
-            <Button className="rounded-xl px-4 py-2 text-sm font-semibold">
+            <Button className="rounded-lg cursor-pointer px-4 py-2 text-sm font-semibold">
+              <LogInIcon size={18} />
               Sign in
             </Button>
           </Link>
