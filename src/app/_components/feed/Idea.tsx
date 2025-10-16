@@ -44,15 +44,24 @@ const Idea = ({idea} : {idea : IdeaType}) => {
             time={timeAgo(idea.createdAt.toString())}
             avatar={idea.author.image || "AvatarPlaceholder.png"}
           />
-          <IdeaContent votes={idea.votesCount} comments={idea._count.comments}
+          <IdeaContent 
+            votes={idea.votesCount} 
+            comments={idea._count.comments}
             heading={idea.title}
             isMobile={mobile}
+            ideaId={idea.id}
+            userVote={idea.userVote}
           />
         </div>
 
         {mobile === false && (
           <div className="md:gap-3 gap-2 md:mt-3 justify-between  items-center hidden md:flex">
-            <Action votes={idea.votesCount} comments={idea._count.comments} />
+            <Action 
+              ideaId={idea.id}
+              votes={idea.votesCount} 
+              comments={idea._count.comments} 
+              userVote={idea.userVote}
+            />
           </div>
         )}
       </div>

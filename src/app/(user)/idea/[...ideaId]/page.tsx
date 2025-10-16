@@ -1,6 +1,7 @@
 "use client";
 import WrapperDescriptionDisplay from "@/app/_components/Idea/DescriptionDisplay";
 import UserDetail from "@/app/_components/Idea/UserDetail";
+import Action from "@/app/_components/feed/Action";
 import Loader from "@/components/kokonutui/loader";
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -12,6 +13,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface IdeaData {
+  id: string;
   title: string;
   company: {
     name: string;
@@ -20,8 +22,13 @@ interface IdeaData {
   description?: SerializedEditorState;
   createdAt: string;
   status: string;
+  votesCount: number;
+  userVote?: "UP" | "DOWN" | null;
   author: {
     name: string;
+  };
+  _count: {
+    comments: number;
   };
 }
 
@@ -30,6 +37,7 @@ const Page = () => {
   const ideaId = usePathname()?.split("/").pop();
  
   const [data, setData] = useState<IdeaData>({
+    id: "",
     title: "",
     company: {
       name: "",
@@ -67,11 +75,15 @@ const Page = () => {
         direction: "ltr",
       },
     },
-    productId: "",
     createdAt: "",
     status: "",
+    votesCount: 0,
+    userVote: null,
     author: {
       name: "",
+    },
+    _count: {
+      comments: 0,
     },
   });
 
@@ -120,14 +132,22 @@ const Page = () => {
             />
           </div>
 
-          {/* Right side: options */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="rounded-full hover:bg-neutral-800 transition-colors"
-          >
-            <Ellipsis size={20} />
-          </Button>
+          {/* Right side: voting and options */}
+          <div className="flex items-center gap-2">
+            <Action 
+              ideaId={data.id}
+              votes={data.votesCount} 
+              comments={data._count.comments} 
+              userVote={data.userVote}
+            />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full hover:bg-accent transition-colors"
+            >
+              <Ellipsis size={20} />
+            </Button>
+          </div>
         </div>
 
         {/* Main Content */}

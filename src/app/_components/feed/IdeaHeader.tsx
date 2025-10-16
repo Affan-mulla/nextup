@@ -11,7 +11,7 @@ interface IdeaProps {
 
 const IdeaHeader = ({username , time,avatar} : IdeaProps) => {
   return (
-    <div className="flex font-inter text-xs text-neutral-500 font-semibold items-center">
+    <div className="flex font-inter text-xs text-muted-foreground font-semibold items-center">
       <Link
         href={`/u/${username}`}
         className="flex items-center hover:underline hover:text-primary duration-200 transition-colors"
@@ -20,13 +20,13 @@ const IdeaHeader = ({username , time,avatar} : IdeaProps) => {
           src={avatar}
           className="mr-2 rounded-full"
           alt=""
-          width={18}
-          height={18}
+          width={20}
+          height={20}
         />
-        <p>u/{username}</p>
+        <p className="text-muted-foreground">u/{username}</p>
       </Link>
-      <Dot />
-      <p>{time}</p>
+      <Dot className="text-muted-foreground" />
+      <p className="text-muted-foreground">{time}</p>
     </div>
   );
 };

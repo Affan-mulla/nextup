@@ -23,41 +23,52 @@ export async function POST(request: Request) {
 
     const parsed = SignUpSchema.parse(data);
 
-    const existingUser = await prisma.user.findUnique({
-      where: { email: parsed.email },
-    });
-    if (existingUser) {
-      return new Response("User already exists", { status: 409 });
-    }
-    const hashedPassword = await hash(parsed.password, 10);
-    const user = await prisma.user.create({
-      data: {
-        username: parsed.username,
-        email: parsed.email,
-        passwordHash: hashedPassword,
-        name: parsed.username,
-        role: parsed.role === "user" ? "USER" : "ADMIN",
+    // Check if email or username already exists
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { email: parsed.email },
+          { username: parsed.username }
+        ]
       },
     });
-    if (!user) {
-      return new Response("Failed to create user", { status: 500 });
+    if (existingUser) {
+      const field = existingUser.email === parsed.email ? "email" : "username";
+      return new Response(`${field.charAt(0).toUpperCase() + field.slice(1)} already exists`, { status: 409 });
     }
-
-    if (parsed.role === "company" && parsed.company) {
-      const company = await prisma.companies.create({
+    const hashedPassword = await hash(parsed.password, 10);
+    
+    // Use transaction to ensure both user and company creation succeed or fail together
+    const result = await prisma.$transaction(async (tx) => {
+      const user = await tx.user.create({
         data: {
-          name: parsed.company,
-          ownerId: user.id,
+          username: parsed.username,
+          email: parsed.email,
+          passwordHash: hashedPassword,
+          name: parsed.username,
+          role: parsed.role === "user" ? "USER" : "ADMIN",
         },
       });
 
-      if (!company) {
-        return new Response("Failed to create company", { status: 500 });
+      if (parsed.role === "company" && parsed.company) {
+        const company = await tx.companies.create({
+          data: {
+            name: parsed.company,
+            ownerId: user.id,
+          },
+        });
+        return { user, company };
       }
+
+      return { user };
+    });
+
+    if (!result.user) {
+      return new Response("Failed to create user", { status: 500 });
     }
 
     const emailSent = await sendEmail(
-      user.email,
+      result.user.email,
       "http://nextup-v7.vercel.app/auth/signin"
     );
 
@@ -69,7 +80,26 @@ export async function POST(request: Request) {
 
     return new Response("User created", { status: 200 });
   } catch (error) {
-    console.error(error);
+    console.error("Signup error:", error);
+    
+    // Handle specific Prisma errors
+    if (error instanceof Error) {
+      if (error.message.includes("Unique constraint")) {
+        return new Response("Email or username already exists", { status: 409 });
+      }
+      if (error.message.includes("Invalid email")) {
+        return new Response("Invalid email format", { status: 400 });
+      }
+    }
+    
+    // Handle validation errors from Zod
+    if (error && typeof error === 'object' && 'issues' in error) {
+      const validationError = error as any;
+      const firstIssue = validationError.issues?.[0];
+      if (firstIssue) {
+        return new Response(firstIssue.message || "Validation error", { status: 400 });
+      }
+    }
 
     return new Response("Internal Server Error", { status: 500 });
   }

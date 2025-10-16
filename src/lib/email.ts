@@ -10,7 +10,7 @@ const sendEmail = async (to: string, url: string) => {
       html: `<p>Click <a href="${url}">here</a> to verify</p>`,
     });
 
-    return email.error ? false : true
+    return email.data ? true : false
   } catch (error) {
     console.error("❌ Error sending email:", error);
     return false;

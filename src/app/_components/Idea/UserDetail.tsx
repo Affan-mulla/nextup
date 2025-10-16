@@ -43,20 +43,20 @@ const UserDetail = ({ username, product, time, avatar }: IdeaProps) => {
 
       {/* Details */}
       <div className="flex flex-col leading-tight">
-        <span className="flex items-center gap-1 text-sm text-neutral-400">
+        <span className="flex items-center gap-1 text-sm text-muted-foreground font-inter font-semibold ">
           <Link
             href={`/p/${product}`}
-            className="text-neutral-200 font-medium hover:text-white transition-colors"
+            className="hover:text-primary transition-colors"
           >
             p/{product}
           </Link>
-          <Dot className="w-4 h-4 text-neutral-500" />
-          <span className="text-xs text-neutral-500">{timeAgo(new Date(time))}</span>
+          <Dot className="text-muted-foreground" />
+          <span className="text-xs text-muted-foreground">{timeAgo(new Date(time))}</span>
         </span>
 
         <Link
           href={`/u/${username}`}
-          className="text-xs text-neutral-500 hover:text-neutral-300 transition-colors w-fit"
+          className="text-xs text-muted-foreground hover:text-primary transition-colors w-fit"
         >
           @{username}
         </Link>

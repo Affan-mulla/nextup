@@ -31,7 +31,7 @@ export default withAuth(
 )
 
 export const config = { 
-  matcher: [ "/dashboard/:path*","/c/:path*","/idea/:path*" ,"/home/:path*" , "/u/:path*", "/notifications/:path*", "/settings/:path*" ],
+  matcher: [ "/dashboard/:path*","/p/:path*","/idea/:path*" ,"/home/:path*" , "/u/:path*", "/notifications/:path*", "/settings/:path*" ],
 }
 
 // 👇 Force Node.js runtime instead of Edge

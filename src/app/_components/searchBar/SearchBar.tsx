@@ -151,7 +151,7 @@ const SearchBar = () => {
                                 transition={{ type: "spring", stiffness: 300 }}
                                 className="flex items-center gap-2 p-2 text-xs font-inter rounded-md cursor-pointer select-none hover:bg-muted "
                               >
-                                <Link href={item.type === "Companies" ? `/c/${item.name}` : `/u/${item.name}`} className="flex items-center gap-2">
+                                <Link href={item.type === "Companies" ? `/p/${item.name}` : `/u/${item.name}`} className="flex items-center gap-2">
                                 {item.type === "Companies" ? (
                                   <Building2
                                     className="text-blue-600"

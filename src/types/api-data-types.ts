@@ -5,6 +5,7 @@ export interface IdeaType {
   status: string;
   createdAt: Date;
   votesCount: number;
+  userVote?: "UP" | "DOWN" | null;
   _count: {
     comments: number;
   };
