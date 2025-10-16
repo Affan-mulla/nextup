@@ -1,9 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
-import { SerializedEditorState } from "lexical";
+import { LexicalNode, SerializedEditorState } from "lexical";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import WrapperDescriptionDisplay from "./DescriptionDisplay";
+import { LexicalJsonNode } from "@/types/lexical-json";
 
 interface ImageData {
   src: string;
@@ -87,14 +88,14 @@ const EnhancedDescriptionDisplay = ({ content }: EnhancedDescriptionDisplayProps
       const images: ImageData[] = [];
       const clonedContent = JSON.parse(JSON.stringify(editorState));
 
-      const extractFromNode = (node: any) => {
+      const extractFromNode = (node: LexicalJsonNode) => {
         // Check for different image node types
         if ((node.type === "image" || node.__type === "image") && node.src) {
           images.push({
             src: node.src,
-            alt: node.altText || node.alt || "",
-            width: node.width,
-            height: node.height,
+            alt: node.altText as string || node.alt as string || "",
+            width: node.width as number,
+            height: node.height as number,
           });
         }
 
@@ -115,7 +116,7 @@ const EnhancedDescriptionDisplay = ({ content }: EnhancedDescriptionDisplayProps
       console.log("📝 Content without images:", contentWithoutImages);
       
       // Only set filtered content if there's actual text content remaining
-      const hasTextContent = contentWithoutImages?.root?.children?.some((child: any) => 
+      const hasTextContent = contentWithoutImages?.root?.children?.some((child: LexicalJsonNode) => 
         child.type === "paragraph" || child.type === "heading" || 
         (child.children && child.children.length > 0)
       );
@@ -129,23 +130,23 @@ const EnhancedDescriptionDisplay = ({ content }: EnhancedDescriptionDisplayProps
   };
 
   const removeImagesFromContent = (content: SerializedEditorState): SerializedEditorState => {
-    const traverse = (node: any): any => {
+    const traverse = (node: LexicalJsonNode): LexicalJsonNode => {
       if (!node || typeof node !== "object") return node;
       
       // Remove image nodes completely
       if (node.type === "image" || node.__type === "image") {
-        return null;
+        return null as unknown as LexicalJsonNode;
       }
   
       if (node.children && Array.isArray(node.children)) {
         // Recursively process children and filter out nulls
         const filteredChildren = node.children
           .map(traverse)
-          .filter((child: any) => child !== null && child !== undefined);
+          .filter((child: LexicalJsonNode) => child !== null && child !== undefined);
         
         // If no children left and this is not a text node, remove the node
         if (filteredChildren.length === 0 && node.type !== "text") {
-          return null;
+          return null as unknown as LexicalJsonNode;
         }
         
         return {

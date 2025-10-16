@@ -1,7 +1,7 @@
 import { SerializedDocument } from "@lexical/file"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function* generateReader<T = any>(
+async function* generateReader<T = unknown>(
   reader: ReadableStreamDefaultReader<T>
 ) {
   let done = false

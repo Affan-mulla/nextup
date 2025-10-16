@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 
 import { SignUpSchema } from "@/lib/validation";
 import { hash } from "bcrypt-ts";
+import { ZodError } from "zod";
 
 export async function POST(request: Request) {
   try {
@@ -94,7 +95,7 @@ export async function POST(request: Request) {
     
     // Handle validation errors from Zod
     if (error && typeof error === 'object' && 'issues' in error) {
-      const validationError = error as any;
+      const validationError = error as ZodError;
       const firstIssue = validationError.issues?.[0];
       if (firstIssue) {
         return new Response(firstIssue.message || "Validation error", { status: 400 });
