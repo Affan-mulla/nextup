@@ -1,5 +1,5 @@
 "use client";
-import WrapperDescriptionDisplay from "@/app/_components/Idea/DescriptionDisplay";
+import EnhancedDescriptionDisplay from "@/app/_components/Idea/EnhancedDescriptionDisplay";
 import UserDetail from "@/app/_components/Idea/UserDetail";
 import Action from "@/app/_components/feed/Action";
 import Loader from "@/components/kokonutui/loader";
@@ -111,10 +111,10 @@ const Page = () => {
     return <Loader size="sm" />;
   }
   return (
-    <div className="md:px-6 px-3 py-4 w-full h-full">
-      <div className="md:px-4 px-2 flex flex-col gap-4 h-full">
+    <div className="min-h-screen bg-background">
+      <div className="max-w-4xl mx-auto px-4 py-6">
         {/* Header */}
-        <div className="flex items-center justify-between flex-shrink-0">
+        <div className="flex items-center justify-between mb-6">
           {/* Left side: back + user/product */}
           <div className="flex items-center gap-3">
             <Link
@@ -143,7 +143,7 @@ const Page = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="rounded-full hover:bg-accent transition-colors"
+              className="rounded-full hover:bg-muted transition-colors"
             >
               <Ellipsis size={20} />
             </Button>
@@ -151,18 +151,15 @@ const Page = () => {
         </div>
 
         {/* Main Content */}
-        <main className="flex flex-col h-full">
+        <main className="bg-card rounded-xl border border-border/50 p-6 shadow-sm">
           {/* Title */}
-          <h1 className="text-2xl font-outfit flex-shrink-0">
+          <h1 className="text-3xl font-outfit font-semibold mb-6 leading-tight">
             {data?.title || "Title"}
           </h1>
 
-          {/* Scrollable Description */}
-          <div className="mt-4 flex-1 overflow-hidden">
-            <ScrollArea className="h-full w-full">
-              <WrapperDescriptionDisplay content={data?.description} />
-              <ScrollBar orientation="vertical" />
-            </ScrollArea>
+          {/* Description */}
+          <div className="prose prose-neutral max-w-none">
+            <EnhancedDescriptionDisplay content={data?.description} />
           </div>
         </main>
       </div>

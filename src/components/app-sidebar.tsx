@@ -46,7 +46,7 @@ const data = {
   projects: [
     {
       name: "Home",
-      url: "/",
+      url: "/feed",
       icon: Home,
     },
     {

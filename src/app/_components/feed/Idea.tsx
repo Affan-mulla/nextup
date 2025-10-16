@@ -42,7 +42,7 @@ const Idea = ({idea} : {idea : IdeaType}) => {
           <IdeaHeader
             username={idea.author.name}
             time={timeAgo(idea.createdAt.toString())}
-            avatar={idea.author.image || "AvatarPlaceholder.png"}
+            avatar={idea.author.image || "/Placeholder.svg"}
           />
           <IdeaContent 
             votes={idea.votesCount} 

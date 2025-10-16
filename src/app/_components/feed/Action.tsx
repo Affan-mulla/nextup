@@ -100,7 +100,7 @@ const Action = ({ ideaId, votes, comments, userVote }: ActionProps) => {
             e.stopPropagation();
             // TODO: Handle comment functionality
           }}
-          className="group flex items-center gap-2 rounded-xl bg-card md:px-3 px-2 md:py-2 py-1 transition-all duration-200 ease-out hover:scale-105 active:scale-95 text-muted-foreground hover:bg-accent/50 hover:text-primary"
+          className="group flex items-center gap-2 rounded-xl bg-card md:px-3 px-2 md:py-2 py-1 transition-all duration-200 ease-out hover:scale-105 active:scale-95 text-muted-foreground hover:bg-accent/50 hover:text-primaryy"
         >
           <MessageCircleMore className="size-5" />
           <span className="text-sm font-medium ">

@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
+import { toast } from "sonner";
 
 interface VoteResponse {
   success: boolean;
@@ -17,7 +18,7 @@ export const useVote = (initialVotesCount: number, initialUserVote?: "UP" | "DOW
 
   const vote = async (ideaId: string, voteType: "UP" | "DOWN") => {
     if (!session?.user?.id) {
-      alert("Please sign in to vote");
+      toast.error("Please sign in to vote");
       return;
     }
 
@@ -65,7 +66,7 @@ export const useVote = (initialVotesCount: number, initialUserVote?: "UP" | "DOW
       setVotesCount(previousVotesCount);
       setUserVote(previousUserVote);
       console.error("Vote error:", error);
-      alert("Failed to vote. Please try again.");
+      toast.error("Failed to vote. Please try again.");
     } finally {
       setIsLoading(false);
     }

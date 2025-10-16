@@ -120,7 +120,7 @@ const DescriptionDisplay = () => {
               <ContentEditable
                 placeholder={placeholder}
                 
-                className="ContentEditable__root relative block min-h-72 overflow-auto px-8 py-4 focus:outline-none"
+                className="ContentEditable__root relative block h-fit overflow-auto focus:outline-none"
               />
             </div>
           </div>
