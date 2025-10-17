@@ -7,11 +7,19 @@ export async function GET(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     const ideaId: string | null = req.nextUrl.searchParams.get("ideaId");
-    console.log(ideaId);
+    const cursor = req.nextUrl.searchParams.get("cursor");
+    const limit = parseInt(req.nextUrl.searchParams.get("limit") ?? "10");
+    const sort = req.nextUrl.searchParams.get("sort") ?? "latest";
 
     if (!ideaId) {
       const ideas = await prisma.ideas.findMany({
-        take: 10,
+        take: limit + 1, // Take one extra to determine if there's a next page
+        ...(cursor ? { skip: 1, cursor: { id: cursor } } : {}),
+        orderBy: sort === "latest" 
+          ? { createdAt: "desc" }
+          : sort === "popular" 
+            ? { votesCount: "desc" } 
+            : { createdAt: "desc" },
         select: {
           id: true,
           title: true,
@@ -37,6 +45,19 @@ export async function GET(req: NextRequest) {
             },
           },
         },
+      });
+
+      // Check if we have more results than the requested limit
+      const hasMore = ideas.length > limit;
+      if (hasMore) {
+        ideas.pop(); // Remove the extra item we used to check for more
+      }
+
+      console.log("Found ideas:", {
+        count: ideas.length,
+        hasMore,
+        cursor,
+        sort
       });
 
       // If user is logged in, fetch their votes for these ideas

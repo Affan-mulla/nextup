@@ -1,4 +1,5 @@
 import * as React from "react"
+import { useStore } from "@/store/store"
 
 import {
   Select,
@@ -11,18 +12,23 @@ import {
 } from "@/components/ui/select"
 
 export function SortFeed() {
+  const { sort, setSort, fetchIdeas } = useStore();
+
+  const handleSortChange = (value: string) => {
+    setSort(value as "latest" | "popular");
+    fetchIdeas(true); // Refresh the feed with new sort
+  };
+
   return (
-    <Select>
-      <SelectTrigger className="w-[100px]">
+    <Select value={sort} onValueChange={handleSortChange}>
+      <SelectTrigger className="w-[120px]">
         <SelectValue placeholder="Sort" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Sort</SelectLabel>
-          <SelectItem value="best">Best</SelectItem>
-          <SelectItem value="top">Top</SelectItem>
-          <SelectItem value="new">New</SelectItem>
-          <SelectItem value="hot">Hot</SelectItem>
+          <SelectLabel>Sort By</SelectLabel>
+          <SelectItem value="latest">Latest</SelectItem>
+          <SelectItem value="popular">Popular</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>

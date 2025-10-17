@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import { useSession } from "next-auth/react";
 import axios from "axios";
 import { toast } from "sonner";
+import { useStore } from "@/store/store";
 
 interface VoteResponse {
   success: boolean;
@@ -14,62 +14,56 @@ export const useVote = (initialVotesCount: number, initialUserVote?: "UP" | "DOW
   const [votesCount, setVotesCount] = useState(initialVotesCount);
   const [userVote, setUserVote] = useState<"UP" | "DOWN" | null>(initialUserVote || null);
   const [isLoading, setIsLoading] = useState(false);
-  const { data: session } = useSession();
+  const {updateVotes, submitVote, user} = useStore();
 
   const vote = async (ideaId: string, voteType: "UP" | "DOWN") => {
-    if (!session?.user?.id) {
+    if (!user?.id) {
       toast.error("Please sign in to vote");
       return;
     }
 
     setIsLoading(true);
     
-    // Optimistic update
+    // Store previous state for potential rollback
     const previousVotesCount = votesCount;
     const previousUserVote = userVote;
     
     // Calculate optimistic vote count
     let newVotesCount = votesCount;
+    let newUserVote = userVote;
+    
     if (previousUserVote === voteType) {
       // Same vote - remove it
       newVotesCount = voteType === "UP" ? votesCount - 1 : votesCount + 1;
-      setUserVote(null);
+      newUserVote = null;
     } else if (previousUserVote) {
       // Different vote - change it
       newVotesCount = voteType === "UP" ? votesCount + 2 : votesCount - 2;
-      setUserVote(voteType);
+      newUserVote = voteType;
     } else {
       // New vote
       newVotesCount = voteType === "UP" ? votesCount + 1 : votesCount - 1;
-      setUserVote(voteType);
+      newUserVote = voteType;
     }
     
+    // Update local state optimistically
     setVotesCount(newVotesCount);
+    setUserVote(newUserVote);
+    
+    // Update global store optimistically
+    updateVotes(ideaId, newVotesCount, newUserVote);
 
-    try {
-      const response = await axios.post("/api/vote", {
-        ideaId,
-        voteType,
-      });
-
-      const data: VoteResponse = await response.data;
-
-      if (!data.success) {
-        throw new Error(data.success ? "Vote failed" : "Network error");
+    // Submit vote - this will handle its own state management for consistency
+    const result = await submitVote(ideaId, voteType, previousUserVote, previousVotesCount);
+    
+    if (!result.success) {
+      // If the vote failed (not due to navigation), show error
+      if (result.error?.name !== 'AbortError') {
+        toast.error("Failed to vote. Please try again.");
       }
-
-      // Update with server response
-      setVotesCount(data.votesCount);
-      setUserVote(data.userVote);
-    } catch (error) {
-      // Revert optimistic update on error
-      setVotesCount(previousVotesCount);
-      setUserVote(previousUserVote);
-      console.error("Vote error:", error);
-      toast.error("Failed to vote. Please try again.");
-    } finally {
-      setIsLoading(false);
     }
+    
+    setIsLoading(false);
   };
 
   const upvote = (ideaId: string) => vote(ideaId, "UP");
