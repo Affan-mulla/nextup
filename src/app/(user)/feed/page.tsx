@@ -101,7 +101,7 @@ function Page() {
 
                 {!loading && !hasMore && ideas.length > 0 && (
                   <div className="w-full py-4 text-center text-muted-foreground">
-                    You've reached the end
+                    You have reached the end
                   </div>
                 )}
               </>
