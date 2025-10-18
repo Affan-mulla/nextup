@@ -55,7 +55,7 @@ function Page() {
           onScroll={handleScroll}
         >
           <ScrollBar orientation="vertical" />
-          <div className="space-y-4">
+          <div className="">
             {error ? (
               <div className="w-full min-h-64 flex justify-center items-center">
                 <motion.div 

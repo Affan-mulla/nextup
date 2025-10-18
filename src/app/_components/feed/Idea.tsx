@@ -7,8 +7,9 @@ import Action from "./Action";
 import { useIsMobile } from "@/utils/use-mobile";
 import { IdeaType } from "@/types/api-data-types";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
-const Idea = ({idea} : {idea : IdeaType}) => {
+const Idea = ({idea,className} : {idea : IdeaType,className ?: string}) => {
   const mobile = useIsMobile();
   const timeAgo = (dateString: string) => {
     const date = new Date(dateString);
@@ -30,7 +31,7 @@ const Idea = ({idea} : {idea : IdeaType}) => {
   };
   const router = useRouter();
   return (
-    <div className="w-full min-h-[100px] flex p-3 gap-4 border-b cursor-pointer hover:bg-accent/20 duration-200"
+    <div className={cn(`w-full flex p-3 gap-4 border-b cursor-pointer hover:bg-accent/20 duration-200 ${className}`)}
     onClick={() => {
       router.push(`/idea/${idea.id}`);
     }}>
