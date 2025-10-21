@@ -4,6 +4,8 @@ export interface User {
     name?: string | null | undefined,
     role?: string | null | undefined,
     image?: string | null | undefined
+    createdAt?: string | null | undefined,
+    _count?: { ideas: number, comments: number,follows: number }
 }
 
 export interface Store {

@@ -1,11 +1,9 @@
 "use client";
 import CommentProfile from "@/app/_components/comment/CommentProfile";
-import { CommentData } from "@/app/_components/comment/types";
 import Loader from "@/components/Loader";
 import { useProfile } from "@/context/profile";
 import { CommentResponse } from "@/types/commentInterface";
 import axios from "axios";
-import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 

@@ -18,7 +18,15 @@ export async function GET(req: Request) {
                 name: true,
                 image: true,
                 createdAt: true,
+                _count: {
+                    select:{
+                        ideas: true,
+                        comments: true,
+                        follows: true
+                    }
+                }
             },
+
         });
 
         if (!data) {

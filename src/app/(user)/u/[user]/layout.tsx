@@ -20,6 +20,11 @@ import { toast } from "sonner";
 import Loader from "@/components/kokonutui/loader";
 import ProfileDetails from "@/app/_components/Profile/ProfileDetails";
 import { useIsMobile } from "@/utils/use-mobile";
+import { formatDistanceToNow } from "date-fns";
+
+interface count {
+  [key: string]: number;
+}
 
 const tabContent = [
   { link: "", title: "Post", icon: Lightbulb, private: false },
@@ -50,20 +55,37 @@ export default function ProfileLayout({
   const [loading, setLoading] = useState(true);
   const isMobile = useIsMobile();
 
+  
+  const { _count = {}, createdAt } = userData || {};
+  const { ideas = 0, comments = 0, follows = 0 } : count = _count;
+
+  const cardFlipData = useMemo(
+    () => [
+      { title: "Posts", quantity: ideas },
+      { title: "Comments", quantity: comments },
+      { title: "Following", quantity: follows },
+      {
+        title: "Joined",
+        quantity: createdAt
+          ? `${formatDistanceToNow(new Date(createdAt))} ago`
+          : "—",
+      },
+    ],
+    [ideas, comments, follows, createdAt]
+  );
+
   const basePath = useMemo(() => `/u/${userName}`, [userName]);
 
   const getUserDetails = async () => {
     try {
       setLoading(true);
 
-      console.log("Getting from store");
-
       // as a fallback, try to reuse store user if its name matches the username (best-effort)
       if (user && user.name && user.name === userName) {
         setUserData(user as User);
         return;
       }
-      
+
       const res = await axios.get(`/api/user/get-user`, {
         params: { username: userName },
       });
@@ -87,6 +109,9 @@ export default function ProfileLayout({
 
   if (loading) return <Loader size="sm" />;
 
+
+
+
   // use session user id for reliable ownership detection
   const sessionUserId = session?.user?.id as string | undefined;
   const isOwner = Boolean(
@@ -102,8 +127,10 @@ export default function ProfileLayout({
             userName={userName}
             isOwner={isOwner}
             onImageUpdate={(newImageUrl) => {
-              setUserData(userData ? { ...userData, image: newImageUrl } : null);
-              update({ ...session?.user,image: newImageUrl });
+              setUserData(
+                userData ? { ...userData, image: newImageUrl } : null
+              );
+              update({ ...session?.user, image: newImageUrl });
             }}
           />
 
@@ -146,13 +173,11 @@ export default function ProfileLayout({
             <div className="py-4">{children}</div>
           </div>
         </section>
-        {
-          !isMobile && (
-            <div className="w-full max-w-[280px] h-fit sticky top-5 self-start">
-          <CardFlip title={userData?.name || ""} subtitle="0 follower" />
-        </div>
-          )
-        }
+        {!isMobile && (
+          <div className="w-full max-w-[280px] h-fit sticky top-5 self-start">
+            <CardFlip title={userData?.name || ""} features={cardFlipData} />
+          </div>
+        )}
       </main>
     </ProfileProvider>
   );

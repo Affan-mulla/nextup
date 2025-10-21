@@ -31,6 +31,8 @@ export const useStore = create<
     role: "",
     username: "",
     image: "",
+    createdAt: "",
+    _count: { follows: 0, ideas: 0, comments: 0 },
   },
 
   // User state

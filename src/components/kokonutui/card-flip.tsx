@@ -13,36 +13,24 @@
 import { cn } from "@/lib/utils";
 import { ArrowRight, Repeat2 } from "lucide-react";
 import { useState } from "react";
+import Loader from "../Loader";
 
 export interface CardFlipProps {
     title?: string;
-    subtitle?: string;
     description?: string;
     features?: {
         title: string;
-        quantity: number;
+        quantity: number | string;
     }[];
 }
 
 export default function CardFlip({
     title = "Design Systems",
-    subtitle = "Explore the fundamentals",
-    features = [{
-        title : "Posts",
-        quantity : 10
-    },{
-        title : "Projects",
-        quantity : 5
-    },{
-        title : "Comments",
-        quantity : 30
-    },{
-        title : "Following",
-        quantity : 15
-    }
-],
+    features
 }: CardFlipProps) {
     const [isFlipped, setIsFlipped] = useState(false);
+
+    if(!features) return <Loader />
 
     return (
         <div
@@ -102,9 +90,6 @@ export default function CardFlip({
                                 <h3 className="text-lg font-semibold text-zinc-900 dark:text-white leading-snug tracking-tighter transition-all duration-500 ease-out-expo group-hover:translate-y-[-4px]">
                                     {title}
                                 </h3>
-                                <p className="text-sm text-zinc-600 dark:text-zinc-200 line-clamp-2 tracking-tight transition-all duration-500 ease-out-expo group-hover:translate-y-[-4px] delay-[50ms]">
-                                    {subtitle}
-                                </p>
                             </div>
                             <div className="relative group/icon">
                                 <div
