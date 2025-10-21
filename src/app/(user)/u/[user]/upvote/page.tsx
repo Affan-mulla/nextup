@@ -52,7 +52,7 @@ const UpvotePage = () => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold mb-4">Posts You've Upvoted</h2>
+      <h2 className="text-xl font-semibold mb-4">Posts You&#39;ve Upvoted</h2>
       {userData && isOwner === false ? (
         <div className="text-destructive">
           Not allowed — you can only view upvoted posts on your own profile.

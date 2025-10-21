@@ -52,7 +52,7 @@ const DownvotePage = () => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold mb-4">Posts You've Downvoted</h2>
+      <h2 className="text-xl font-semibold mb-4">Posts You&#39;ve Downvoted</h2>
       {userData && isOwner === false ? (
         <div className="text-destructive">
           Not allowed — you can only view downvoted posts on your own profile.
