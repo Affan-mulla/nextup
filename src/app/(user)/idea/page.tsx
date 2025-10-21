@@ -46,22 +46,22 @@ const Page = () => {
 
   async function uploadImage(file: File) {
     // 1. Ask server for signed URL
-    const res = await axios.post("/api/upload-url", { fileName: file.name });
+    const res = await axios.post("/api/upload/idea", { fileName: file.name });
 
-    const { signedUrl, path, error } = await res.data;
+    const { signedUrl, publicUrl, error } = await res.data;
     if (error) throw new Error(error);
 
     // 2. Upload directly to Supabase Storage
-    const uploadRes = await axios.put(signedUrl, file, {
+    const uploadRes = await fetch(signedUrl, {
+      method: 'PUT',
+      body: file,
       headers: { "Content-Type": file.type },
     });
 
-    if (!uploadRes.status || uploadRes.status !== 200)
-      throw new Error("Upload failed");
+    if (!uploadRes.ok) throw new Error("Upload failed");
 
-    // 3. Return public URL or storage path
-    const publicUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/ideas/${path}`;
-    return { publicUrl, path };
+    // 3. Return public URL
+    return { publicUrl };
   }
 
   const imagesExist = async (images: LexicalJsonNode[]) => {

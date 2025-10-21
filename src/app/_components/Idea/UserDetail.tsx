@@ -37,6 +37,7 @@ const UserDetail = ({ username, product, time, avatar }: IdeaProps) => {
           alt={`${username} avatar`}
           width={36}
           height={36}
+          
           className="rounded-full border border-neutral-800"
         />
       </Link>
