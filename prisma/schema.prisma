@@ -153,18 +153,21 @@ model Votes {
 }
 
 model Comments {
-  id         String    @id @default(cuid())
+  id         String          @id @default(cuid())
   content    String
   userId     String
   ideaId     String
-  createdAt  DateTime  @default(now())
-  commentId  String?
-  votesCount Int       @default(0)
-  isDeleted  Boolean   @default(false)
+  createdAt  DateTime        @default(now())
+  commentId  String?         // parent comment id (nullable)
+  votesCount Int             @default(0)
+  isDeleted  Boolean         @default(false)
 
-  user       User      @relation(fields: [userId], references: [id])
-  idea       Ideas     @relation(fields: [ideaId], references: [id])
+  user       User            @relation(fields: [userId], references: [id])
+  idea       Ideas           @relation(fields: [ideaId], references: [id])
   votes      CommentVotes[]
+
+  parent     Comments?       @relation("CommentReplies", fields: [commentId], references: [id])
+  replies    Comments[]      @relation("CommentReplies")
 }
 
 model CommentVotes {

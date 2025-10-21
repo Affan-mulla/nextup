@@ -11,6 +11,7 @@ import { useStore } from "@/store/store";
 import { toast } from "sonner";
 import { useDeleteComment } from "@/hooks/useCommentDelete";
 import { DeleteCommentDialog } from "./DeleteCommentDialog";
+import CommentVotes from "./CommentVotes";
 
 interface CommentProps {
   id: string;
@@ -122,48 +123,7 @@ const Comment = ({
         <div className="space-y-2">
           <p className="font-inter text-sm pl-10 text-muted-foreground">{localIsDeleted ? 'Comment deleted by user' : content}</p>
           <div className="flex gap-3 pl-10">
-            <div className="flex gap-2 items-center">
-              <Button
-                variant={"ghost"}
-                size={"icon-sm"}
-                className={`transition-colors duration-150 ${
-                  userVote === "UP"
-                    ? "text-green-500"
-                    : "hover:text-green-500"
-                }`}
-                onClick={() => handleVote("UP")}
-                disabled={isVoting || localIsDeleted}
-              >
-                <ArrowBigUpDash className="size-4" />
-              </Button>
-              <motion.span
-                key={votesCount}
-                initial={{ scale: 1 }}
-                animate={votesCount !== initialVotesCount ? { scale: [1, 1.2, 1] } : {}}
-                className={`text-xs font-medium ${
-                  votesCount > 0
-                    ? "text-green-500"
-                    : votesCount < 0
-                    ? "text-red-500"
-                    : ""
-                }`}
-              >
-                {votesCount}
-              </motion.span>
-              <Button
-                variant={"ghost"}
-                size={"icon-sm"}
-                className={`transition-colors duration-150 ${
-                  userVote === "DOWN"
-                    ? "text-red-500"
-                    : "hover:text-red-500"
-                }`}
-                onClick={() => handleVote("DOWN")}
-                disabled={isVoting || localIsDeleted}
-              >
-                <ArrowBigDownDash className="size-4" />
-              </Button>
-            </div>
+            <CommentVotes votesCount={votesCount} userVote={userVote} handleVote={handleVote} isVoting={isVoting} initialVotesCount={initialVotesCount} localIsDeleted={localIsDeleted} />
             <Button
               variant={"ghost"}
               size="sm"

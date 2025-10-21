@@ -19,6 +19,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import Loader from "@/components/kokonutui/loader";
 import ProfileDetails from "@/app/_components/Profile/ProfileDetails";
+import { useIsMobile } from "@/utils/use-mobile";
 
 const tabContent = [
   { link: "", title: "Post", icon: Lightbulb, private: false },
@@ -47,6 +48,7 @@ export default function ProfileLayout({
   const { data: session, update } = useSession();
   const [userData, setUserData] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const isMobile = useIsMobile();
 
   const basePath = useMemo(() => `/u/${userName}`, [userName]);
 
@@ -93,8 +95,8 @@ export default function ProfileLayout({
 
   return (
     <ProfileProvider value={{ userData, isOwner }}>
-      <main className="px-4  min-w-full py-5 flex gap-4 relative">
-        <section className="p-5 rounded-xl w-full">
+      <main className="md:px-4 px-2  min-w-full py-5 flex gap-4 relative">
+        <section className="md:p-5 p-2 rounded-xl w-full">
           <ProfileDetails
             userData={userData}
             userName={userName}
@@ -144,9 +146,13 @@ export default function ProfileLayout({
             <div className="py-4">{children}</div>
           </div>
         </section>
-        <div className="w-full max-w-[280px] h-fit sticky top-5 self-start">
+        {
+          !isMobile && (
+            <div className="w-full max-w-[280px] h-fit sticky top-5 self-start">
           <CardFlip title={userData?.name || ""} subtitle="0 follower" />
         </div>
+          )
+        }
       </main>
     </ProfileProvider>
   );

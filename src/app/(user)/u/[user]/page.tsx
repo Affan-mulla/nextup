@@ -38,7 +38,6 @@ const PostsPage = () => {
   if (loading) return <Loader />
 
   if (!posts.length) return <div className="text-muted-foreground">No posts yet.</div>;
-  console.log(posts);
   
 
   return (
