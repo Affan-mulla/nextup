@@ -51,11 +51,12 @@ export async function POST(req: Request) {
       path,
       publicUrl: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/idea_images/${path}`
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("[IDEA-IMAGE-UPLOAD]", error);
+      const err = error instanceof Error ? error : new Error("Unknown error");
     return NextResponse.json(
-      { error: error.message || "Failed to generate upload URL" },
-      { status: error.message === "Unauthorized" ? 401 : 500 }
+      { error: err.message || "Failed to generate upload URL" },
+      { status: err.message === "Unauthorized" ? 401 : 500 }
     );
   }
 }

@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { useStore } from "@/store/store";
 
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Store } from "@/types/store-types";
 import Loader from "@/components/kokonutui/loader";
 
 export default function UserLayout({

@@ -53,7 +53,7 @@ export function LoginForm({
       redirect: false,
       email: data.email,
       password: data.password,
-      callbackUrl: "/ideas",
+      callbackUrl: "/feed",
     });
 
     if (res?.error) {

@@ -44,10 +44,11 @@ export async function PATCH(req: Request) {
     });
 
     return NextResponse.json(updatedUser);
-  } catch (error: any) {
+  } catch (error) {
     console.error("[USER-UPDATE]", error);
+      const err = error instanceof Error ? error : new Error("Unknown error");
     return NextResponse.json(
-      { error: error.message || "Failed to update user" },
+      { error: err.message || "Failed to update user" },
       { status: 500 }
     );
   }

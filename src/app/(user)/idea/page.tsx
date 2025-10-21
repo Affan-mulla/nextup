@@ -15,7 +15,7 @@ import { replaceImagesFromLexical } from "@/utils/replaceImage";
 import { base64ToFile } from "@/utils/baseToFile";
 import { extractImagesFromLexical } from "@/utils/extractImage";
 import { Editor } from "@/components/blocks/editor-x/editor";
-import { LexicalNode, SerializedEditorState, SerializedLexicalNode } from "lexical";
+import {  SerializedEditorState, SerializedLexicalNode } from "lexical";
 import { Store } from "@/types/store-types";
 import { LexicalJsonNode } from "@/types/lexical-json";
 

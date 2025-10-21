@@ -3,8 +3,8 @@ import useSWR from "swr";
 import axios from "axios";
 import Comment from "@/app/_components/comment/comment";
 import { CommentData } from "./types";
-import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import Loader from "@/components/Loader";
 
 const fetcher = (url: string, ideaId: string) =>
   axios.get(url, { params: { ideaId } }).then((res) => res.data);
@@ -44,7 +44,7 @@ export default function CommentsSection({ ideaId }: { ideaId: string }) {
   if (!comments) {
     return (
       <div className="my-4 flex justify-center">
-        <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+       <Loader/>
       </div>
     );
   }

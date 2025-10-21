@@ -2,12 +2,12 @@ import React from "react";
 import { motion, AnimatePresence, easeInOut } from "framer-motion";
 import {
   Building2,
-  Loader2,
   User,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useSearch } from "@/hooks/useSearch";
 import Link from "next/link";
+import Loader from "@/components/Loader";
 
 const VARIANTS = {
   dropdown: {
@@ -116,7 +116,7 @@ const SearchBar = () => {
                   transition={{ duration: 0.2 }}
                   className="px-4 py-3 text-sm text-muted-foreground text-center w-full"
                 >
-                  <Loader2 size={16} className="animate-spin text-center" />
+                  <Loader/>
                 </motion.div>
               ) : results.length === 0 ? (
                 <motion.div

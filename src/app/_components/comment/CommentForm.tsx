@@ -60,7 +60,7 @@ export default function CommentForm({ ideaId, commentId, onSuccess, isReply = fa
         <div className="flex items-center w-full gap-3 px-2">
           <Avatar className="h-8 w-8">
             {currentUser?.image ? (
-              <AvatarImage src={currentUser.image} alt={currentUser.name || ""} />
+              <AvatarImage src={currentUser.image} alt={currentUser.name || ""} className="object-cover" />
             ) : (
               <AvatarFallback>
                 <User className="w-4 h-4 text-muted-foreground" />

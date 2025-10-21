@@ -27,7 +27,7 @@ const IdeaHeader = ({username , time,avatar} : IdeaProps) => {
         <p className="text-muted-foreground">u/{username}</p>
       </Link>
       <Dot className="text-muted-foreground" />
-      <p className="text-muted-foreground">{time}</p>
+      <p className="text-muted-foreground">{time} ago</p>
     </div>
   );
 };

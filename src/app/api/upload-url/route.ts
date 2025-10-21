@@ -54,11 +54,12 @@ export async function POST(req: Request) {
       signedUrl: data.signedUrl,
       path: fileName,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("[UPLOAD-URL]", error);
+      const err = error instanceof Error ? error : new Error("Unknown error");
     return NextResponse.json(
-      { error: error.message || "Failed to generate upload URL" },
-      { status: error.message === "Unauthorized" ? 401 : 500 }
+      { error: err.message || "Failed to generate upload URL" },
+      { status: err.message === "Unauthorized" ? 401 : 500 }
     );
   }
 }
@@ -84,11 +85,12 @@ export async function GET(req: Request) {
       uploadUrl: data.signedUrl,
       filePath: fileName,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("[UPLOAD-URL]", error);
+      const err = error instanceof Error ? error : new Error("Unknown error");
     return NextResponse.json(
-      { error: error.message || "Failed to generate upload URL" },
-      { status: error.message === "Unauthorized" ? 401 : 500 }
+      { error: err.message || "Failed to generate upload URL" },
+      { status: err.message === "Unauthorized" ? 401 : 500 }
     );
   }
 }

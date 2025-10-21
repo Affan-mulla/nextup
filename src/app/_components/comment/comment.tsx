@@ -102,7 +102,7 @@ const Comment = ({
         <div className="flex gap-2 items-center">
           <Avatar className="h-8 w-8">
             {user.image ? (
-              <AvatarImage src={user.image} alt={user.username} />
+              <AvatarImage src={user.image} alt={user.username} className="object-cover" />
             ) : (
               <AvatarFallback>
                 <User className="w-4 h-4 text-muted-foreground" />
