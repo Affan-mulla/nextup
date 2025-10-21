@@ -1,14 +1,13 @@
 "use client";
 
 import { AppSidebar } from "@/components/app-sidebar";
-import {  SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { SessionProvider, useSession } from "next-auth/react";
 import Header from "../_components/Header";
 import { useEffect, useState } from "react";
 import { useStore } from "@/store/store";
 
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Store } from "@/types/store-types";
 import Loader from "@/components/kokonutui/loader";
 
 export default function UserLayout({
@@ -25,19 +24,24 @@ export default function UserLayout({
 
 function Content({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
-  const user = useStore((state: Store) => state.user);
-  const setUser = useStore((state: Store) => state.setUser);
+  const { fetchCurrentUser, user } = useStore();
 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user?.id && status === "authenticated" && session?.user) {
-      setUser(session.user);
-    }
-    if (status !== "loading") {
+    if (!session?.user || user?.id) {
       setLoading(false);
+      return;
     }
-  }, [status, session, user?.id, setUser]);
+
+    const fetchUser = async () => {
+      setLoading(true);
+      await fetchCurrentUser(session.user.id);
+      setLoading(false);
+    };
+
+    fetchUser();
+  }, [session, user?.id, fetchCurrentUser]);
 
   return (
     <SidebarProvider>
@@ -51,7 +55,7 @@ function Content({ children }: { children: React.ReactNode }) {
           <Header />
 
           {/* Scrollable page content */}
-         
+
           <ScrollArea className="flex-1 overflow-y-auto">
             <ScrollBar orientation="vertical" />
             {loading ? (
@@ -61,7 +65,7 @@ function Content({ children }: { children: React.ReactNode }) {
             ) : (
               children
             )}
-          </ScrollArea>     
+          </ScrollArea>
         </div>
       </div>
     </SidebarProvider>

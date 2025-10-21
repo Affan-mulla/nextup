@@ -30,17 +30,17 @@ const data = {
     {
       title: "Ezybill",
       url: "/p/ezybill",
-      img: "Placeholder.svg",
+      img: "/Placeholder.svg",
     },
     {
       title: "Snapgram",
       url: "/p/snapgram",
-      img: "Placeholder.svg",
+      img: "/Placeholder.svg",
     },
     {
       title: "Cinder",
       url: "/p/cinder",
-      img: "Placeholder.svg",
+      img: "/Placeholder.svg",
     },
   ],
   projects: [

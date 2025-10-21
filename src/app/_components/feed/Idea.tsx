@@ -7,30 +7,15 @@ import Action from "./Action";
 import { useIsMobile } from "@/utils/use-mobile";
 import { IdeaType } from "@/types/api-data-types";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { formatDistanceToNow } from "date-fns";
 
-const Idea = ({idea} : {idea : IdeaType}) => {
+const Idea = ({idea,className} : {idea : IdeaType,className ?: string}) => {
   const mobile = useIsMobile();
-  const timeAgo = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-    if (seconds < 60) return `${seconds} seconds ago`;
-    const minutes = Math.floor(seconds / 60);
-    if (minutes < 60) return `${minutes} minutes ago`;
-    const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `${hours} hours ago`;
-    const days = Math.floor(hours / 24);
-    if (days < 7) return `${days} days ago`;
-    const weeks = Math.floor(days / 7);
-    if (weeks < 4) return `${weeks} weeks ago`;
-    const months = Math.floor(weeks / 4);
-    if (months < 12) return `${months} months ago`;
-    const years = Math.floor(months / 12);
-    return `${years} years ago`;
-  };
+
   const router = useRouter();
   return (
-    <div className="w-full min-h-[100px] flex p-3 gap-4 border-b cursor-pointer hover:bg-accent/20 duration-200"
+    <div className={cn(`w-full flex p-3 gap-4 border-b cursor-pointer hover:bg-accent/20 duration-200 ${className}`)}
     onClick={() => {
       router.push(`/idea/${idea.id}`);
     }}>
@@ -41,7 +26,7 @@ const Idea = ({idea} : {idea : IdeaType}) => {
         <div className="flex flex-col gap-1 flex-1  ">
           <IdeaHeader
             username={idea.author.name}
-            time={timeAgo(idea.createdAt.toString())}
+            time={formatDistanceToNow(idea.createdAt)}
             avatar={idea.author.image || "/Placeholder.svg"}
           />
           <IdeaContent 

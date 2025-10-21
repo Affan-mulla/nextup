@@ -18,15 +18,16 @@ const IdeaHeader = ({username , time,avatar} : IdeaProps) => {
       >
         <Image
           src={avatar || "/Placeholder.svg"}
-          className="mr-2 rounded-full"
+          className="mr-2 rounded-full object-cover aspect-square"
           alt=""
-          width={20}
-          height={20}
+          
+          width={25}
+          height={25}
         />
         <p className="text-muted-foreground">u/{username}</p>
       </Link>
       <Dot className="text-muted-foreground" />
-      <p className="text-muted-foreground">{time}</p>
+      <p className="text-muted-foreground">{time} ago</p>
     </div>
   );
 };

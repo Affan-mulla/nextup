@@ -39,24 +39,24 @@ enum VoteType {
 }
 
 model User {
-  id           String      @id @default(cuid())
-  email        String      @unique
-  emailVerified DateTime?
-  username     String      @unique
-  name         String?
-  image        String?
-  role         Role        @default(USER)
-  passwordHash String?
-  createdAt    DateTime    @default(now())
+  id             String         @id @default(cuid())
+  email          String         @unique
+  emailVerified  DateTime?
+  username       String         @unique
+  name           String?
+  image          String?
+  role           Role          @default(USER)
+  passwordHash   String?
+  createdAt      DateTime      @default(now())
 
-  companies    Companies[]
-  follows      Follows[]
-  ideas        Ideas[]
-  votes        Votes[]
-  comments     Comments[]
-  accounts     Account[]
-  sessions     Session[]
-  
+  companies      Companies[]
+  follows        Follows[]
+  ideas          Ideas[]
+  votes          Votes[]
+  comments       Comments[]
+  commentVotes   CommentVotes[]
+  accounts       Account[]
+  sessions       Session[]
 }
 
 model Companies {
@@ -153,14 +153,34 @@ model Votes {
 }
 
 model Comments {
+  id         String          @id @default(cuid())
+  content    String
+  userId     String
+  ideaId     String
+  createdAt  DateTime        @default(now())
+  commentId  String?         // parent comment id (nullable)
+  votesCount Int             @default(0)
+  isDeleted  Boolean         @default(false)
+
+  user       User            @relation(fields: [userId], references: [id])
+  idea       Ideas           @relation(fields: [ideaId], references: [id])
+  votes      CommentVotes[]
+
+  parent     Comments?       @relation("CommentReplies", fields: [commentId], references: [id])
+  replies    Comments[]      @relation("CommentReplies")
+}
+
+model CommentVotes {
   id        String    @id @default(cuid())
-  content   String
   userId    String
-  ideaId    String
+  commentId String
+  type      VoteType
   createdAt DateTime  @default(now())
 
   user      User      @relation(fields: [userId], references: [id])
-  idea      Ideas     @relation(fields: [ideaId], references: [id])
+  comment   Comments  @relation(fields: [commentId], references: [id])
+
+  @@unique([userId, commentId])
 }
 
 model Account {

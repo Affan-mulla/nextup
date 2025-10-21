@@ -1,17 +1,21 @@
 "use client";
+import CommentForm from "@/app/_components/comment/CommentForm";
 import EnhancedDescriptionDisplay from "@/app/_components/Idea/EnhancedDescriptionDisplay";
 import UserDetail from "@/app/_components/Idea/UserDetail";
 import Action from "@/app/_components/feed/Action";
 import Loader from "@/components/kokonutui/loader";
+import CommentsSection from "@/app/_components/comment/CommentsSection";
 import { Button } from "@/components/ui/button";
 import { useStore } from "@/store/store";
 import axios from "axios";
 import { SerializedEditorState } from "lexical";
-import { ArrowLeft, Ellipsis } from "lucide-react";
+import {
+  ArrowLeft,
+  Ellipsis,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
-import useSWR, { SWRResponse } from "swr";
+import useSWR from "swr";
 
 const fetcher = (url: string, ideaId: string) =>
   axios.get(url, { params: { ideaId } }).then((res) => res.data);
@@ -37,11 +41,11 @@ interface IdeaData {
 }
 
 const Page = () => {
-   const ideaId = usePathname()?.split("/").pop();
+  const ideaId = usePathname()?.split("/").pop();
   const { ideas, addIdea } = useStore(); // make sure you have addIdea() in your store
 
   // 1️⃣ Try getting it from local store first
-  const cachedIdea = ideas.find(idea => idea.id === ideaId);
+  const cachedIdea = ideas.find((idea) => idea.id === ideaId);
 
   // 2️⃣ If not cached, fetch from API with SWR
   const { data, error, isLoading } = useSWR(
@@ -57,7 +61,7 @@ const Page = () => {
     }
   );
 
-  const idea = cachedIdea || data;
+  const idea: IdeaData = cachedIdea || data;
 
   if (isLoading && !idea) return <Loader size="sm" />;
   if (error && !idea)
@@ -84,7 +88,7 @@ const Page = () => {
             <UserDetail
               product={idea?.company.name || ""}
               username={idea?.author.name || ""}
-              time={  idea?.createdAt || ""}
+              time={idea?.createdAt || ""}
               avatar={idea?.company.logoUrl || "../Placeholder.svg"}
             />
           </div>
@@ -119,6 +123,10 @@ const Page = () => {
             <EnhancedDescriptionDisplay content={idea?.description} />
           </div>
         </main>
+
+        <CommentForm ideaId={idea.id} />
+
+        <CommentsSection ideaId={idea.id} />
       </div>
     </div>
   );

@@ -1,7 +1,8 @@
 import { Store, SubmitVoteResult, User } from "@/types/store-types";
 import { create } from "zustand";
-import axios, { Axios, AxiosError } from "axios";
+import axios from "axios";
 import { IdeaType } from "@/types/api-data-types";
+import { toast } from "sonner";
 
 export const useStore = create<
   Store & {
@@ -12,6 +13,8 @@ export const useStore = create<
     sort: "latest" | "popular";
     setSort: (sort: "latest" | "popular") => void;
     fetchIdeas: (refresh?: boolean) => Promise<void>;
+    submitVote: (ideaId: string, voteType: "UP" | "DOWN", previousVote: "UP" | "DOWN" | null, previousCount: number) => Promise<SubmitVoteResult>;
+    fetchCurrentUser: (userId: string) => Promise<void>;
     loadMore: () => Promise<void>;
     updateVotes: (
       ideaId: string,
@@ -26,7 +29,25 @@ export const useStore = create<
     email: "",
     name: "",
     role: "",
+    username: "",
     image: "",
+    createdAt: "",
+    _count: { follows: 0, ideas: 0, comments: 0 },
+  },
+
+  // User state
+  fetchCurrentUser : async (userId: string) => {
+    try {
+      const res = await axios.get("/api/user/profile", {
+        params: {
+          userId
+        }
+      });
+
+      set({ user: res.data });
+    } catch (error) {
+      toast.error("Failed to fetch current user");
+    }
   },
 
   setUser: (user: User) => set(() => ({ user })),

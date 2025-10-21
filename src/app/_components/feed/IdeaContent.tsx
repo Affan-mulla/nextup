@@ -7,7 +7,7 @@ const IdeaContent = ({heading, isMobile, votes, comments, ideaId, userVote}: {
   votes?: number, 
   comments?: number,
   ideaId?: string,
-  userVote?: "UP" | "DOWN" | null
+  userVote?: "UP" | "DOWN" | null 
 }) => {
   
   return (

@@ -42,6 +42,7 @@ export const authOptions: NextAuthOptions = {
           email: user.email,
           name: user.name,
           role: user.role,
+          image : user.image
         }
       },
     }),
@@ -49,16 +50,30 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id
-        token.role = user.role
+        // Attach commonly used user fields to the token so they are
+        // available in the session callback and on the client.
+        // `user` can come from providers or credentials, so use any.
+        const u = user;
+        console.log(user);
+        
+        token.id = u.id ?? token.id;
+        token.role = u.role ?? token.role;
+        // NextAuth uses `picture` on the token for image by convention
+        token.picture = u.image ?? token.picture;
       }
       return token
     },
+
     async session({ session, token }) {
+      console.log(session);
+      console.log(token);
+      
+      
       return {
         ...session,
         user: {
           ...session.user,
+          image: token.picture as string,
           id: token.id as string,
           role: token.role as string,
         },
