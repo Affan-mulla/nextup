@@ -5,6 +5,7 @@ export interface User {
     role?: string | null | undefined,
     image?: string | null | undefined
     createdAt?: string | null | undefined,
+    username?: string | null | undefined
     _count?: { ideas: number, comments: number,follows: number }
 }
 

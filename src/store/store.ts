@@ -44,7 +44,25 @@ export const useStore = create<
         }
       });
 
-      set({ user: res.data });
+      if (res.status !== 200) {
+        toast.error("Failed to fetch current user");
+        return;
+      }
+
+      set({ user: {
+        id : res.data.id,
+        email : res.data.email,
+        name : res.data.name,
+        username : res.data.username,
+        role : res.data.role,
+        image : res.data.image,
+        createdAt : res.data.createdAt,
+        _count : {
+          ideas : res.data._count.ideas,
+          comments : res.data._count.comments,
+          follows : res.data._count.follows
+        }
+      } });
     } catch (error) {
       toast.error("Failed to fetch current user");
     }

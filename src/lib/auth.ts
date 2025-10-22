@@ -42,7 +42,8 @@ export const authOptions: NextAuthOptions = {
           email: user.email,
           name: user.name,
           role: user.role,
-          image : user.image
+          image : user.image,
+          createdAt: user.createdAt,
         }
       },
     }),
@@ -65,9 +66,6 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token }) {
-      console.log(session);
-      console.log(token);
-      
       
       return {
         ...session,
