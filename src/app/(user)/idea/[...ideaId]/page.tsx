@@ -16,6 +16,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import useSWR from "swr";
+import BackButton from "@/components/Back-Button";
 
 const fetcher = (url: string, ideaId: string) =>
   axios.get(url, { params: { ideaId } }).then((res) => res.data);
@@ -78,13 +79,7 @@ const Page = () => {
         <div className="flex items-center justify-between mb-6">
           {/* Left side: back + user/product */}
           <div className="flex items-center gap-3">
-            <Link
-              href="/feed"
-              className="p-2 rounded-full bg-muted transition-colors hover:bg-muted/80"
-            >
-              <ArrowLeft size={22} />
-            </Link>
-
+            <BackButton/>
             <UserDetail
               product={idea?.company.name || ""}
               username={idea?.author.name || ""}
