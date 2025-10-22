@@ -45,6 +45,8 @@ model User {
   username       String         @unique
   name           String?
   image          String?
+  bio            String?
+  userJobRole    String?
   role           Role          @default(USER)
   passwordHash   String?
   createdAt      DateTime      @default(now())

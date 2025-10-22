@@ -23,8 +23,8 @@ export default function UserLayout({
 }
 
 function Content({ children }: { children: React.ReactNode }) {
-  const { data: session, status } = useSession();
-  const { fetchCurrentUser, user, setUser } = useStore();
+  const { data: session} = useSession();
+  const { fetchCurrentUser, user } = useStore();
 
   const [loading, setLoading] = useState(true);
 

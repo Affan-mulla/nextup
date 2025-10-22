@@ -8,7 +8,6 @@ import { ImagePlus, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import axios from "axios";
-import { useSession } from "next-auth/react";
 import { useStore } from "@/store/store";
 
 

@@ -32,6 +32,8 @@ export const useStore = create<
     username: "",
     image: "",
     createdAt: "",
+    bio: "",
+    jobRole: "",
     _count: { follows: 0, ideas: 0, comments: 0 },
   },
 
@@ -57,6 +59,8 @@ export const useStore = create<
         role : res.data.role,
         image : res.data.image,
         createdAt : res.data.createdAt,
+        bio : res.data.bio,
+        jobRole : res.data.userJobRole,
         _count : {
           ideas : res.data._count.ideas,
           comments : res.data._count.comments,

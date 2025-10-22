@@ -20,6 +20,8 @@ export async function GET(req: Request) {
         role: true,
         email: true,
         createdAt: true,
+        bio: true,
+        userJobRole: true,
         _count: {
           select: {
             ideas: true,

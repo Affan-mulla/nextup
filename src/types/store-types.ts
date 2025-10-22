@@ -1,11 +1,13 @@
 export interface User {
     id: string ,
-    email?: string | null | undefined,
-    name?: string | null | undefined,
-    role?: string | null | undefined,
-    image?: string | null | undefined
-    createdAt?: string | null | undefined,
-    username: string  | undefined
+    email: string ,
+    name?: string  | undefined,
+    role?: string | undefined,
+    image?: string  | undefined,
+    createdAt?: string ,
+    username: string ,
+    bio?: string  | undefined,
+    jobRole?: string | undefined,
     _count?: { ideas: number, comments: number,follows: number }
 }
 

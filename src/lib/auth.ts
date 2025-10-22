@@ -16,7 +16,6 @@ export const authOptions: NextAuthOptions = {
         return {
           id: profile.id.toString(),
           username: profile.login || profile.name,
-          name: profile.name || profile.login,
           email: profile.email,
           image: profile.avatar_url,
           role: "USER",
@@ -40,6 +39,7 @@ export const authOptions: NextAuthOptions = {
         return {
           id: user.id,
           email: user.email,
+          username: user.username,
           name: user.name,
           role: user.role,
           image : user.image,
@@ -49,33 +49,31 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        // Attach commonly used user fields to the token so they are
-        // available in the session callback and on the client.
-        // `user` can come from providers or credentials, so use any.
-        const u = user;
-        console.log(user);
-        
-        token.id = u.id ?? token.id;
-        token.role = u.role ?? token.role;
-        // NextAuth uses `picture` on the token for image by convention
-        token.picture = u.image ?? token.picture;
-      }
-      return token
-    },
-
-    async session({ session, token }) {
-      
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          image: token.picture as string,
-          id: token.id as string,
-          role: token.role as string,
-        },
-      }
-    },
+  async jwt({ token, user }) {
+    if (user) {
+      const u = user as any
+      token.id = u.id ?? token.id
+      token.name = u.name ?? token.name
+      token.username = u.username ?? token.username
+      token.role = u.role ?? token.role
+      token.picture = u.image ?? token.picture
+    }
+    return token
   },
+
+  async session({ session, token }) {
+    return {
+      ...session,
+      user: {
+        ...session.user,
+        id: token.id as string,
+        name: token.name as string,
+        username: token.username as string,
+        role: token.role as string,
+        image: token.picture as string,
+      },
+    }
+  },
+}
+
 }

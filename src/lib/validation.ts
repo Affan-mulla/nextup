@@ -59,3 +59,27 @@ export const commentSchema = z.object({
 });
 
 export type CommentType = z.infer<typeof commentSchema>;
+
+export const settingFormSchema = z.object({
+  userId: z.string(),
+  username: z
+    .string()
+    .min(4, "Username must be between 4 and 15 characters")
+    .max(15, "Username must be between 4 and 15 characters"),
+  name: z
+    .string()
+    .min(2, "Name must be between 2 and 30 characters")
+    .max(30, "Name must be between 2 and 30 characters")
+    .optional(),
+  email: z.string().email("Invalid email address"),
+  jobRole: z
+    .string()
+    .max(30, "Job role must be less than 30 characters")
+    .optional(),
+  bio: z
+    .string()
+    .max(150, "Bio must be less than 150 characters")
+    .optional(),
+});
+
+export type SettingFormType = z.infer<typeof settingFormSchema>;
